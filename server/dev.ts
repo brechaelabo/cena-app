@@ -1,4 +1,3 @@
-
 import app, { prisma, logger } from './app';
 
 const PORT = process.env.PORT || 3001;
