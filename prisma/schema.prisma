@@ -1,0 +1,254 @@
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                    String    @id @default(cuid())
+  clerkId               String?   @unique
+  email                 String    @unique
+  name                  String?
+  imageUrl              String?
+  currentRole           Role      @default(GUEST)
+  activePlan            Plan?
+  billingCycle          BillingCycle?
+  isApproved            Boolean   @default(false)
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+  preferredTutorId      String?
+  
+  // Profile fields
+  dateOfBirth           String?
+  phone                 String?
+  socialMediaLinks      Json?     // Array of {platform, url}
+  hasNoSocialMedia      Boolean   @default(false)
+  formativeExperiences  String?
+  baseTechnique         String?
+  otherTechnique        String?
+  professionalExperiences String?
+  whyJoinCena           String?
+  tutorApplicationStatus TutorApplicationStatus?
+  educationLevel        EducationLevel?
+  feedbacksSentCount    Int       @default(0)
+  actorsTutoredCount    Int       @default(0)
+  
+  // Actor specific
+  actorLevel            ActorLevel?
+  interestedTechniques  String[]  // Array of technique names
+  otherInterests        ActorOtherInterest[]
+  subscriptionEndDate   String?
+  isAutoRenew           Boolean   @default(false)
+  
+  // Relations
+  roles                 RolePivot[]
+  submissions           Submission[]
+  feedbacksGiven        Feedback[] @relation("TutorFeedbacks")
+  feedbacksReceived     Feedback[] @relation("ActorFeedbacks")
+  notifications         Notification[]
+  scheduledSessions     ScheduledSession[]
+  addOnPurchases        AddOnPurchase[]
+
+  @@map("users")
+}
+
+model RolePivot {
+  id        String   @id @default(cuid())
+  userId    String
+  role      Role
+  plan      Plan?
+  createdAt DateTime @default(now())
+  
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("role_pivots")
+}
+
+model Theme {
+  id                String   @id @default(cuid())
+  title             String
+  description       String
+  headerImageUrl    String?
+  videoUrl          String?
+  pdfUrls           String[] // Array of PDF URLs
+  month             Int
+  year              Int
+  active            Boolean  @default(true)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  
+  submissions       Submission[]
+  
+  @@map("themes")
+}
+
+model Submission {
+  id                String        @id @default(cuid())
+  themeId           String
+  userId            String
+  tapeUrls          String[]      // Array of video URLs
+  feedbackMode      FeedbackMode
+  createdAt         DateTime      @default(now())
+  addOnPurchaseId   String?
+  feedbackStatus    SubmissionStatus @default(PENDING)
+  assignedTutorId   String?
+  deadlineTimestamp BigInt?
+  
+  theme             Theme         @relation(fields: [themeId], references: [id])
+  user              User          @relation(fields: [userId], references: [id])
+  feedbacks         Feedback[]
+  
+  @@map("submissions")
+}
+
+model Feedback {
+  id           String   @id @default(cuid())
+  submissionId String
+  tutorId      String
+  actorId      String
+  videoUrl     String
+  transcript   String
+  liveAt       String?
+  createdAt    DateTime @default(now())
+  
+  submission   Submission @relation(fields: [submissionId], references: [id])
+  tutor        User       @relation("TutorFeedbacks", fields: [tutorId], references: [id])
+  actor        User       @relation("ActorFeedbacks", fields: [actorId], references: [id])
+  
+  @@map("feedbacks")
+}
+
+model AddOnPurchase {
+  id                 String      @id @default(cuid())
+  userId             String
+  type               AddOnType
+  redeemed           Boolean     @default(false)
+  targetSubmissionId String?
+  createdAt          DateTime    @default(now())
+  
+  user               User        @relation(fields: [userId], references: [id])
+  
+  @@map("addon_purchases")
+}
+
+model Notification {
+  id        String           @id @default(cuid())
+  userId    String
+  type      NotificationType
+  title     String
+  message   String
+  linkTo    String?
+  iconName  String?
+  createdAt DateTime         @default(now())
+  isRead    Boolean          @default(false)
+  
+  user      User             @relation(fields: [userId], references: [id])
+  
+  @@map("notifications")
+}
+
+model ScheduledSession {
+  id          String            @id @default(cuid())
+  tutorId     String
+  actorId     String
+  meetLink    String
+  scheduledAt String
+  notes       String?
+  status      SessionStatus     @default(SCHEDULED)
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+  
+  tutor       User              @relation(fields: [tutorId], references: [id])
+  
+  @@map("scheduled_sessions")
+}
+
+// Enums
+enum Role {
+  ADMIN
+  TUTOR
+  ACTOR
+  GUEST
+  VISITOR
+}
+
+enum Plan {
+  BASIC
+  PLUS
+  PRO
+}
+
+enum BillingCycle {
+  MONTHLY
+  QUARTERLY
+  SEMIANNUAL
+  ANNUAL
+}
+
+enum AddOnType {
+  LIVE_FEEDBACK_UPGRADE
+  ONE_ON_ONE_SESSION
+}
+
+enum FeedbackMode {
+  ASYNC
+  LIVE
+}
+
+enum TutorApplicationStatus {
+  PENDING_REVIEW
+  OBSERVATION
+  APPROVED
+  REJECTED
+}
+
+enum EducationLevel {
+  HIGH_SCHOOL
+  COLLEGE_INCOMPLETE
+  COLLEGE_COMPLETE
+  POST_GRADUATE
+}
+
+enum ActorLevel {
+  INICIJANTE
+  INTERMEDIARIO
+  PROFISSIONAL_DRT
+  PROFISSIONAL_EXPERIENTE_DRT
+}
+
+enum ActorOtherInterest {
+  AUTO_GRAVACAO
+  ESTRATEGIAS_CARREIRA
+  PRODUCAO_MATERIAL
+}
+
+enum NotificationType {
+  NEW_THEME
+  SUBMISSION_CONFIRMED
+  FEEDBACK_READY
+  SESSION_SCHEDULED_ACTOR
+  SESSION_REQUESTED_TUTOR
+  SESSION_CANCELED_TUTOR
+  SESSION_CANCELED_ACTOR
+  NEW_COURSE
+  NEW_EVENT
+  USER_APPROVED
+  TUTOR_APP_APPROVED
+  TUTOR_APP_REJECTED
+  GENERAL_INFO
+}
+
+enum SubmissionStatus {
+  PENDING
+  COMPLETED
+}
+
+enum SessionStatus {
+  SCHEDULED
+  COMPLETED
+  CANCELED
+}
