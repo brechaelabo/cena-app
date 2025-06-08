@@ -2,7 +2,7 @@
 import express from 'express';
 import { PrismaClient } from '@prisma/client';
 import { authenticateToken, requireRole } from '../middleware/auth';
-import { Role } from '../../types';
+import { Role } from '@prisma/client';
 
 const router = express.Router();
 const prisma = new PrismaClient();
