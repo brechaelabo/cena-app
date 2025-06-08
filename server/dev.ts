@@ -1,10 +1,6 @@
 
 import express from 'express';
 import cors from 'cors';
-import dotenv from 'dotenv';
-
-// Load environment variables
-dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -20,7 +16,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Simple logging middleware
 app.use((req, res, next) => {
-  console.log(`${req.method} ${req.path}`);
+  console.log(`${new Date().toISOString()} - ${req.method} ${req.path}`);
   next();
 });
 
@@ -37,7 +33,6 @@ app.get('/api/health', (req, res) => {
 app.post('/api/auth/login', (req, res) => {
   const { email, password } = req.body;
   
-  // Mock authentication for testing
   if (email && password) {
     res.json({
       success: true,
@@ -147,7 +142,7 @@ app.use('*', (req, res) => {
 });
 
 // Error handling middleware
-app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+app.use((err, req, res, next) => {
   console.error('Server error:', err);
   res.status(500).json({
     success: false,
@@ -160,4 +155,16 @@ app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 Backend server running on http://0.0.0.0:${PORT}`);
   console.log(`📡 API available at http://0.0.0.0:${PORT}/api`);
   console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`✅ Server started successfully at ${new Date().toISOString()}`);
+});
+
+// Graceful shutdown
+process.on('SIGINT', () => {
+  console.log('🛑 Received SIGINT, shutting down gracefully');
+  process.exit(0);
+});
+
+process.on('SIGTERM', () => {
+  console.log('🛑 Received SIGTERM, shutting down gracefully');
+  process.exit(0);
 });
