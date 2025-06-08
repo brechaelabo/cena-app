@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CENA Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              // Cores para tema misto (Header/Sidebar escuros)
+              'brand-primary': '#1A1A1A', // Dark gray / near black - Usado em Header/Sidebar
+              'brand-accent': '#4A4A4A',  // Medium gray - Usado para hover/bordas em Header/Sidebar
+              'text-primary': '#E0E0E0', // Light text on dark bg - Usado em Header/Sidebar
+              'text-secondary': '#B0B0B0',// Lighter text on dark bg - Usado em Header/Sidebar
+              'bg-dark-element': '#2C2C2C', // Um cinza escuro para elementos em fundos escuros
+              
+              // Novas cores para o tema claro (Conteúdo Principal)
+              'page-bg': '#F9FAFB',      // Cinza muito claro (Fundo principal das páginas)
+              'card-bg': '#FFFFFF',       // Branco (Fundo de cards e elementos de UI)
+              'text-headings': '#1F2937', // Cinza escuro (Títulos principais)
+              'text-body': '#374151',    // Cinza médio-escuro (Texto de parágrafo)
+              'text-muted': '#6B7280',   // Cinza médio (Texto secundário, placeholders)
+              
+              'action-primary-bg': '#1F2937',    // Cinza escuro/preto (Botões primários)
+              'action-primary-text': '#FFFFFF',   // Branco (Texto em botões primários)
+              'action-primary-hover': '#374151', // Hover para botões primários
+              
+              'action-secondary-bg': '#E5E7EB',    // Cinza claro (Botões secundários)
+              'action-secondary-text': '#1F2937',   // Texto escuro para botões secundários
+              'action-secondary-hover': '#D1D5DB', // Hover para botões secundários
+              
+              'border-subtle': '#E5E7EB',    // Cinza claro (Bordas de cards, inputs)
+              'link-active': '#2563EB',      // Azul (Links, anéis de foco) - Mantido azul padrão para links gerais
+              
+              'status-active-text': '#065F46', // Verde escuro para texto
+              'status-active-bg': '#D1FAE5',   // Fundo verde claro para badge
+              'status-inactive-text': '#9A3412', // Laranja/Marrom escuro para texto
+              'status-inactive-bg': '#FEF3C7',   // Fundo amarelo claro para badge
+
+              // Novos tons de azul
+              'accent-blue-subtle': '#EBF8FF',   // Azul bem claro para fundos sutis e elementos de UI
+              'accent-blue-marker': '#90CDF4',   // Azul médio-claro para marcadores, ícones
+              'accent-blue-emphasis': '#3B82F6', // Azul mais forte para links de destaque, ênfase
+              'accent-blue-soft': '#E0F2FE',     // Outro azul bem claro, para fundos de seção alternativos
+
+              // Section-specific backgrounds - Reverted to white for neutral card backgrounds
+              'public-events-bg': '#FFFFFF',   // White
+              'private-sessions-bg': '#FFFFFF', // White
+            },
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+            },
+          }
+        }
+      }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script type="importmap">
+{
+  "imports": {
+    "react/": "https://esm.sh/react@^19.1.0/",
+    "react": "https://esm.sh/react@^19.1.0",
+    "react-router-dom": "https://esm.sh/react-router-dom@^7.6.1",
+    "react-dom/": "https://esm.sh/react-dom@^19.1.0/",
+    "@google/genai": "https://esm.sh/@google/genai"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body class="bg-page-bg text-body font-sans">
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <!-- This is where React will render the app -->
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>

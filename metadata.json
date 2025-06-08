@@ -1,0 +1,6 @@
+{
+  "name": "CENA - Self-Tape Platform",
+  "description": "A SaaS platform for actors to practice self-tapes, receive feedback from tutors, and manage their progress. It includes features for admins to manage content and users, and for visitors to explore plans.",
+  "requestFramePermissions": [],
+  "prompt": ""
+}
