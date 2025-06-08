@@ -77,7 +77,7 @@ const ActorViewFeedbackPage: React.FC = () => {
   
   const canRequestLiveFeedback = (): boolean => {
     if (!user || !user.activePlan) return false;
-    const planDetails = PLAN_DETAILS_MAP[user.activePlan];
+    const planDetails = PLAN_DETAILS_MAP[user.activePlan]; // Correct usage from constants
     return planDetails.id === 'PRO' && (planDetails.freeTextSubmissions || 0) > 0; 
   };
 
