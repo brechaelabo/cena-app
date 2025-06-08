@@ -69,6 +69,12 @@ app.use((req, res, next) => {
   next();
 });
 
+// Routes
+import authRoutes from './routes/auth';
+
+// API Routes
+app.use('/api/auth', authRoutes);
+
 // Health check endpoint
 app.get('/api/health', (req, res) => {
   res.json({ 

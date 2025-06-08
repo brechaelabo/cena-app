@@ -28,6 +28,15 @@ mode = "sequential"
 task = "shell.exec"
 args = "python -m http.server 5000"
 
+[[workflows.workflow]]
+name = "Backend Server"
+author = 42617357
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd server && npx ts-node dev.ts"
+
 [[ports]]
 localPort = 443
 externalPort = 3000
