@@ -74,7 +74,7 @@ import userRoutes from './routes/users';
 import themeRoutes from './routes/themes';
 import submissionRoutes from './routes/submissions';
 
-// API Routes
+// API Routes with explicit path definitions
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/themes', themeRoutes);
