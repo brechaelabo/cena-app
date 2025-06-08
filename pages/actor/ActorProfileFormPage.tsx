@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../../components/Common/Button';
@@ -64,7 +63,7 @@ const ActorProfileFormPage: React.FC = () => {
       navigate(PATHS.LOGIN);
       return;
     }
-    
+
     const actorData = getUserById(user.id);
     if (actorData) {
       setFormData(prev => ({
@@ -90,6 +89,7 @@ const ActorProfileFormPage: React.FC = () => {
         totalSubmissions: submissions.length,
         totalFeedbacksReceived: submissions.filter(s => s.feedbackStatus === 'COMPLETED').length,
         themesExplored: new Set(submissions.map(s => s.themeId)).size,
+```typescript
         monthsAsMember: getMonthsSince(user.createdAt),
         percursosConcluidos: 0, 
         sessoes1a1Realizadas: sessoes.filter(s => s.status === 'COMPLETED').length,
@@ -135,7 +135,7 @@ const ActorProfileFormPage: React.FC = () => {
       setProfileImagePreview(user?.imageUrl || null);
     }
   };
-  
+
   const handleSocialMediaChange = (index: number, field: 'platform' | 'url', value: string) => {
     const newSocialMediaLinks = formData.socialMediaLinks ? [...formData.socialMediaLinks] : [];
     if (newSocialMediaLinks[index]) {
@@ -162,7 +162,7 @@ const ActorProfileFormPage: React.FC = () => {
     try {
       const profileDataForUpdate = { ...formData, whyJoinCena: formData.objectives };
       const updatedActor = addActorProfileDetails(user.id, profileDataForUpdate, profileImagePreview || undefined);
-      
+
       if (updatedActor) {
         auth.setCurrentUserAndPersist(updatedActor);
         addToast('Perfil atualizado com sucesso! Acesso liberado.', 'success');
@@ -184,22 +184,22 @@ const ActorProfileFormPage: React.FC = () => {
       const updatedUser = { ...user, activePlan: planId, billingCycle: cycle };
       // Persist directly to AuthContext and localStorage
       auth.setCurrentUserAndPersist(updatedUser);
-      
+
       addToast(`Plano alterado para ${PLAN_DETAILS_MAP[planId].name} (${BILLING_CYCLE_DISCOUNTS_DETAILS[cycle].label})! (Simulação)`, 'success');
       setLoadingPlanId(null);
     }, 1000);
   };
-  
+
   const calculatePrice = (basePrice: number, cycle: BillingCycle) => {
     const discountRate = BILLING_CYCLE_DISCOUNTS_DETAILS[cycle].discountRate;
     return basePrice * (1 - discountRate);
   };
-  
+
   const commonInputProps = { disabled: isSubmitting, className: "rounded-lg" };
   const currentPlanDetails = user?.activePlan ? PLAN_DETAILS_MAP[user.activePlan] : null;
 
   if (!user) return <div className="text-center p-10">Redirecionando...</div>;
-  
+
   const trajectoryStatsForCard = actorStats ? [
     { label: "Self-tapes Enviados", value: actorStats.totalSubmissions, icon: <FilmIcon /> }, 
     { label: "Feedbacks Recebidos", value: actorStats.totalFeedbacksReceived, icon: <ClipboardCheckIcon /> },
@@ -259,7 +259,7 @@ const ActorProfileFormPage: React.FC = () => {
                 </Button>
               </div>
             </div>
-            
+
             <CollapsibleCard title="Dados Pessoais" defaultOpen={!user.isApproved}>
               <div className="space-y-4">
                 <Input label="Data de Nascimento" name="dateOfBirth" type="date" value={formData.dateOfBirth || ''} onChange={handleChange} {...commonInputProps} />
@@ -326,14 +326,14 @@ const ActorProfileFormPage: React.FC = () => {
                 </div>
               </div>
             </CollapsibleCard>
-            
+
             <CollapsibleCard title="Experiências Formativas e Profissionais" defaultOpen={!user.isApproved}>
                <div className="space-y-4">
                 <Textarea label="Principais Experiências Formativas (Opcional)" name="formativeExperiences" value={formData.formativeExperiences || ''} onChange={handleChange} rows={3} {...commonInputProps} placeholder="Ex: Graduação em Artes Cênicas (Escola X, Ano Y)..."/>
                 <Textarea label="Principais Experiências Profissionais (Opcional)" name="professionalExperiences" value={formData.professionalExperiences || ''} onChange={handleChange} rows={3} {...commonInputProps} placeholder="Ex: Peça 'Nome da Peça' (Personagem A, Diretor B, Ano C)..."/>
               </div>
             </CollapsibleCard>
-            
+
             <div className="pt-5 border-t border-border-subtle">
               <Button type="submit" variant="primary" className="w-full" isLoading={isSubmitting} disabled={isSubmitting}>
                 {user.isApproved ? 'Salvar Alterações no Perfil' : 'Completar e Salvar Perfil'}
@@ -387,7 +387,7 @@ const ActorProfileFormPage: React.FC = () => {
                         <div className="p-6 text-center">
                         <PriceTagIcon className="w-10 h-10 mx-auto mb-3 text-link-active" />
                         <h3 className="text-xl font-bold text-black mb-1">{plan.name}</h3>
-                        <p className="text-lg sm:text-xl md:text-2xl font-extrabold text-black whitespace-nowrap">R${discountedPrice.toFixed(2)}<span className="text-xs sm:text-sm md:text-base font-normal text-text-muted">/mês</span></p>
+                        <p className="text-3xl sm:text-2xl md:text-3xl font-extrabold text-headings whitespace-nowrap">R${discountedPrice.toFixed(2)}<span className="text-base sm:text-sm md:text-base font-normal text-text-muted">/mês</span></p>
                         {selectedCycle !== BillingCycle.MONTHLY && (<p className="text-xs text-text-muted line-through">De R${plan.priceMonthly.toFixed(2)}/mês</p>)}
                         <p className="text-xs text-text-muted mt-1">
                             Total: R${(discountedPrice * (selectedCycle === BillingCycle.QUARTERLY ? 3 : selectedCycle === BillingCycle.SEMIANNUAL ? 6 : selectedCycle === BillingCycle.ANNUAL ? 12 : 1)).toFixed(2)}
