@@ -89,7 +89,6 @@ const ActorProfileFormPage: React.FC = () => {
         totalSubmissions: submissions.length,
         totalFeedbacksReceived: submissions.filter(s => s.feedbackStatus === 'COMPLETED').length,
         themesExplored: new Set(submissions.map(s => s.themeId)).size,
-```typescript
         monthsAsMember: getMonthsSince(user.createdAt),
         percursosConcluidos: 0, 
         sessoes1a1Realizadas: sessoes.filter(s => s.status === 'COMPLETED').length,
