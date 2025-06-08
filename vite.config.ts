@@ -10,8 +10,8 @@ export default defineConfig(({ mode }) => {
       strictPort: false,
       allowedHosts: [".replit.dev", ".repl.co", "localhost"],
       hmr: {
-        port: 443,
-        clientPort: 443,
+        port: 5000,
+        clientPort: 5000,
       },
     },
     define: {
