@@ -8,15 +8,10 @@ export default defineConfig(({ mode }) => {
       server: {
         host: '0.0.0.0',
         port: 5000,
-        allowedHosts: 'all',
+        strictPort: false,
         hmr: {
+          port: 443,
           clientPort: 443
-        },
-        cors: true,
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Methods': '*',
-          'Access-Control-Allow-Headers': '*'
         }
       },
       define: {
