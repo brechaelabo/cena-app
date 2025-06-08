@@ -386,7 +386,7 @@ const ActorProfileFormPage: React.FC = () => {
                         <div className="p-6 text-center">
                         <PriceTagIcon className="w-10 h-10 mx-auto mb-3 text-link-active" />
                         <h3 className="text-xl font-bold text-black mb-1">{plan.name}</h3>
-                        <p className="font-extrabold text-headings leading-tight mx-[12%]" style={{ fontSize: 'clamp(1.5rem, 6vw, 4rem)' }}>
+                        <p className="font-extrabold text-headings leading-tight mx-[12%]" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.5rem)' }}>
                           <span className="inline-block">R${discountedPrice.toFixed(2)}</span><span style={{ fontSize: '0.4em' }} className="font-normal text-text-muted whitespace-nowrap">/mês</span>
                         </p>
                         {selectedCycle !== BillingCycle.MONTHLY && (<p className="text-xs text-text-muted line-through">De R${plan.priceMonthly.toFixed(2)}/mês</p>)}
