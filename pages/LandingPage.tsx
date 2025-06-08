@@ -117,8 +117,8 @@ const LandingPage: React.FC = () => {
                 <Card key={plan.id} className="text-center p-6 h-full flex flex-col">
                   <PriceTagIcon className="w-10 h-10 mx-auto mb-4 text-link-active" />
                   <h3 className="text-2xl font-bold text-headings mb-2">{plan.name}</h3>
-                  <p className="text-2xl sm:text-3xl md:text-2xl lg:text-3xl xl:text-4xl 2xl:text-5xl font-extrabold text-headings mb-1 leading-tight">
-                    <span className="inline-block">R${discountedPrice.toFixed(2)}</span><span className="text-[0.4em] font-normal text-text-muted whitespace-nowrap">/mês</span>
+                  <p className="font-extrabold text-headings mb-1 leading-tight mx-[12%]" style={{ fontSize: 'clamp(1.5rem, 6vw, 4rem)' }}>
+                    <span className="inline-block">R${discountedPrice.toFixed(2)}</span><span style={{ fontSize: '0.4em' }} className="font-normal text-text-muted whitespace-nowrap">/mês</span>
                   </p>
                   {selectedCycle !== BillingCycle.MONTHLY && (
                     <p className="text-sm text-text-muted line-through">De R$${plan.priceMonthly.toFixed(2)}/mês</p>
