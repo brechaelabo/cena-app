@@ -1,4 +1,3 @@
-
 import { Plan, PlanDetails, PricingInfo, Role, BillingCycle, AddOnType, TutorApplicationStatus, EducationLevel, ActorLevel, ActorOtherInterest, EventAudienceType, SubscriptionStatusFilter, SidebarNavItemConfig } from './types';
 
 export const APP_NAME = "CENA";
@@ -14,7 +13,7 @@ export const PATHS = {
   CURRENT_THEME: '/theme/current', 
   LIVE_SESSIONS: '/live-sessions', 
   MESSAGES: '/messages', // New path for general messages/notifications
-  
+
   // Percursos (Courses)
   PERCURSOS_ACTOR: '/percursos',
   COURSE_DETAIL: '/percursos/:slug', 
@@ -31,7 +30,7 @@ export const PATHS = {
   ACTOR_SUBMIT_TAPE: '/actor/submit/:themeId',
   ACTOR_VIEW_FEEDBACK: '/actor/feedback/:submissionId',
   ACTOR_PROFILE_FORM: '/actor/profile/edit', 
-  
+
   // Tutor specific
   TUTOR_DASHBOARD: '/tutor/dashboard',
   TUTOR_REVIEW_SUBMISSIONS: '/tutor/submissions',
@@ -40,7 +39,7 @@ export const PATHS = {
   TUTOR_APPLICATION_FORM: '/tutor/apply', 
   TUTOR_PROFILE_PAGE: '/tutor/profile/:tutorId', 
   TUTOR_PROFILE_EDIT_FORM: '/tutor/profile/edit', 
-  
+
   // Admin specific
   ADMIN_DASHBOARD: '/admin/dashboard',
   ADMIN_MANAGE_THEMES: '/admin/themes',

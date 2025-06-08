@@ -124,6 +124,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
             if (item.path.includes(':submissionId')) {
               currentPath = item.path.replace(':submissionId', 'all'); 
             }
+            if (item.path.includes(':categoryId')) {
+              currentPath = item.path.replace(':categoryId', 'default'); 
+            }
           }
 
           const navLinkContent = (
