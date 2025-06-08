@@ -1,35 +1,105 @@
-import React, { useEffect, useState } from 'react';
 
-function App() {
-  const [backendStatus, setBackendStatus] = useState('Testando...');
-  const [frontendStatus, setFrontendStatus] = useState('Frontend OK');
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { ToastProvider } from './contexts/ToastContext';
+import { NotificationProvider } from './contexts/NotificationContext';
+import { SidebarConfigProvider } from './contexts/SidebarConfigContext';
+import { Role } from './types';
 
-  useEffect(() => {
-    // Test backend connection
-    fetch('/api/health')
-      .then(response => response.json())
-      .then(data => {
-        setBackendStatus(`Backend OK: ${data.message}`);
-      })
-      .catch(error => {
-        setBackendStatus(`Backend Error: ${error.message}`);
-      });
-  }, []);
+// Import pages
+import LandingPage from './pages/LandingPage';
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
+import DashboardPage from './pages/DashboardPage';
+import NotFoundPage from './pages/NotFoundPage';
+import PendingApprovalPage from './pages/PendingApprovalPage';
 
+// Test simple imports first
+import ActorDashboard from './pages/actor/ActorDashboard';
+import TutorDashboard from './pages/tutor/TutorDashboard';
+import AdminDashboard from './pages/admin/AdminDashboard';
+
+const App: React.FC = () => {
   return (
-    <div style={{ padding: '20px', fontFamily: 'Arial' }}>
-      <h1>CENA - Teste de Conexão</h1>
-      <div>
-        <p><strong>Frontend:</strong> {frontendStatus}</p>
-        <p><strong>Backend:</strong> {backendStatus}</p>
-      </div>
-      {backendStatus.includes('OK') && (
-        <div style={{ color: 'green', marginTop: '20px' }}>
-          ✅ <strong>Conexão estabelecida com sucesso!</strong>
-        </div>
-      )}
-    </div>
+    <Router>
+      <AuthProvider>
+        <ToastProvider>
+          <NotificationProvider>
+            <SidebarConfigProvider>
+              <Routes>
+                {/* Public routes */}
+                <Route path="/" element={<LandingPage />} />
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/register" element={<RegisterPage />} />
+
+                {/* Dashboard route */}
+                <Route path="/dashboard" element={
+                  <ProtectedRoute>
+                    <DashboardPage />
+                  </ProtectedRoute>
+                } />
+
+                {/* Pending approval route */}
+                <Route path="/pending-approval" element={
+                  <ProtectedRoute>
+                    <PendingApprovalPage />
+                  </ProtectedRoute>
+                } />
+
+                {/* Simple Actor routes */}
+                <Route path="/actor/dashboard" element={
+                  <ProtectedRoute allowedRoles={[Role.ACTOR]}>
+                    <ActorDashboard />
+                  </ProtectedRoute>
+                } />
+
+                {/* Simple Tutor routes */}
+                <Route path="/tutor/dashboard" element={
+                  <ProtectedRoute allowedRoles={[Role.TUTOR]}>
+                    <TutorDashboard />
+                  </ProtectedRoute>
+                } />
+
+                {/* Simple Admin routes */}
+                <Route path="/admin/dashboard" element={
+                  <ProtectedRoute allowedRoles={[Role.ADMIN]}>
+                    <AdminDashboard />
+                  </ProtectedRoute>
+                } />
+
+                {/* 404 route */}
+                <Route path="*" element={<NotFoundPage />} />
+              </Routes>
+            </SidebarConfigProvider>
+          </NotificationProvider>
+        </ToastProvider>
+      </AuthProvider>
+    </Router>
   );
+};
+
+interface ProtectedRouteProps {
+  children: React.ReactNode;
+  allowedRoles?: Role[];
 }
+
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, allowedRoles }) => {
+  const { user, isLoading } = useAuth();
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!user) {
+    return <Navigate to="/login" />;
+  }
+
+  if (allowedRoles && !allowedRoles.includes(user.currentRole)) {
+    return <Navigate to="/dashboard" />;
+  }
+
+  return <>{children}</>;
+};
 
 export default App;
