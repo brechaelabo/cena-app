@@ -13,6 +13,13 @@ export default defineConfig(({ mode }) => {
         port: 443,
         clientPort: 443,
       },
+      proxy: {
+        '/api': {
+          target: 'http://localhost:3001',
+          changeOrigin: true,
+          secure: false,
+        },
+      },
     },
     define: {
       "process.env.API_KEY": JSON.stringify(env.GEMINI_API_KEY),
