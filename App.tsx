@@ -5,6 +5,7 @@ import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { ToastProvider } from './contexts/ToastContext';
 import { NotificationProvider } from './contexts/NotificationContext';
 import { SidebarConfigProvider } from './contexts/SidebarConfigContext';
+import { UserManagementProvider } from './contexts/UserManagementContext';
 import { Role } from './types';
 
 // Import pages
@@ -26,7 +27,8 @@ const App: React.FC = () => {
       <AuthProvider>
         <ToastProvider>
           <NotificationProvider>
-            <SidebarConfigProvider>
+            <UserManagementProvider>
+              <SidebarConfigProvider>
               <Routes>
                 {/* Public routes */}
                 <Route path="/" element={<LandingPage />} />
@@ -72,6 +74,7 @@ const App: React.FC = () => {
                 <Route path="*" element={<NotFoundPage />} />
               </Routes>
             </SidebarConfigProvider>
+            </UserManagementProvider>
           </NotificationProvider>
         </ToastProvider>
       </AuthProvider>

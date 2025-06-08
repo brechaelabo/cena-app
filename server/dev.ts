@@ -1,49 +1,163 @@
-import app, { prisma, logger } from './app';
 
+import express from 'express';
+import cors from 'cors';
+import dotenv from 'dotenv';
+
+// Load environment variables
+dotenv.config();
+
+const app = express();
 const PORT = process.env.PORT || 3001;
 
-async function startDevServer() {
-  try {
-    // Test database connection
-    await prisma.$connect();
-    logger.info('✅ Database connected successfully');
+// Basic middleware
+app.use(cors({
+  origin: ['http://localhost:5000', 'http://127.0.0.1:5000'],
+  credentials: true
+}));
 
-    // Start server
-    const server = app.listen(PORT, '0.0.0.0', () => {
-      logger.info(`🚀 Backend server running on http://0.0.0.0:${PORT}`);
-      logger.info(`📡 API available at http://0.0.0.0:${PORT}/api`);
-      logger.info(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
-    });
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-    // Health check
-    setTimeout(async () => {
-      try {
-        const response = await fetch(`http://localhost:${PORT}/api/health`);
-        if (response.ok) {
-          logger.info('✅ Backend health check passed');
-        }
-      } catch (error) {
-        logger.warn('⚠️ Backend health check failed');
+// Simple logging middleware
+app.use((req, res, next) => {
+  console.log(`${req.method} ${req.path}`);
+  next();
+});
+
+// Health check endpoint
+app.get('/api/health', (req, res) => {
+  res.json({ 
+    status: 'OK', 
+    message: 'Backend server is running',
+    timestamp: new Date().toISOString()
+  });
+});
+
+// Simple auth endpoints
+app.post('/api/auth/login', (req, res) => {
+  const { email, password } = req.body;
+  
+  // Mock authentication for testing
+  if (email && password) {
+    res.json({
+      success: true,
+      data: {
+        user: {
+          id: '1',
+          email: email,
+          name: 'Test User',
+          currentRole: 'ACTOR',
+          isApproved: true
+        },
+        token: 'mock-jwt-token'
       }
-    }, 2000);
-
-  } catch (error) {
-    logger.error('❌ Failed to start backend server:', error);
-    process.exit(1);
+    });
+  } else {
+    res.status(400).json({
+      success: false,
+      error: 'Email e senha são obrigatórios'
+    });
   }
-}
-
-// Graceful shutdown
-process.on('SIGINT', async () => {
-  logger.info('🛑 Received SIGINT, shutting down gracefully');
-  await prisma.$disconnect();
-  process.exit(0);
 });
 
-process.on('SIGTERM', async () => {
-  logger.info('🛑 Received SIGTERM, shutting down gracefully');
-  await prisma.$disconnect();
-  process.exit(0);
+app.post('/api/auth/register', (req, res) => {
+  const { email, password, name, role = 'ACTOR' } = req.body;
+  
+  if (email && password && name) {
+    res.status(201).json({
+      success: true,
+      data: {
+        user: {
+          id: '1',
+          email: email,
+          name: name,
+          currentRole: role,
+          isApproved: false
+        },
+        token: 'mock-jwt-token'
+      }
+    });
+  } else {
+    res.status(400).json({
+      success: false,
+      error: 'Todos os campos são obrigatórios'
+    });
+  }
 });
 
-startDevServer();
+app.get('/api/auth/me', (req, res) => {
+  res.json({
+    success: true,
+    data: {
+      id: '1',
+      email: 'test@example.com',
+      name: 'Test User',
+      currentRole: 'ACTOR',
+      isApproved: true,
+      roles: ['ACTOR']
+    }
+  });
+});
+
+// Simple users endpoint
+app.get('/api/users', (req, res) => {
+  res.json({
+    success: true,
+    data: [
+      {
+        id: '1',
+        email: 'test@example.com',
+        name: 'Test User',
+        currentRole: 'ACTOR',
+        isApproved: true
+      }
+    ]
+  });
+});
+
+// Simple themes endpoint
+app.get('/api/themes', (req, res) => {
+  res.json({
+    success: true,
+    data: [
+      {
+        id: '1',
+        title: 'Tema de Teste',
+        description: 'Descrição do tema de teste',
+        active: true
+      }
+    ]
+  });
+});
+
+// Simple submissions endpoint
+app.get('/api/submissions', (req, res) => {
+  res.json({
+    success: true,
+    data: []
+  });
+});
+
+// 404 handler
+app.use('*', (req, res) => {
+  res.status(404).json({
+    success: false,
+    error: 'Endpoint not found'
+  });
+});
+
+// Error handling middleware
+app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+  console.error('Server error:', err);
+  res.status(500).json({
+    success: false,
+    error: 'Internal server error'
+  });
+});
+
+// Start server
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`🚀 Backend server running on http://0.0.0.0:${PORT}`);
+  console.log(`📡 API available at http://0.0.0.0:${PORT}/api`);
+  console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
+});
