@@ -48,7 +48,7 @@ args = "npm run dev"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "npx tsx server/dev.ts"
+args = "npm run dev:backend"
 
 [[workflows.workflow]]
 name = "Debug Full Stack"
