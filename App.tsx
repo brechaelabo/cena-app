@@ -198,7 +198,7 @@ const AppContent: React.FC = () => {
   return (
     <div className="flex flex-col min-h-screen">
       {showLayout && <Header toggleSidebar={toggleSidebar} />}
-      {!showLayout && !publicPages.includes(location.pathname) && <Header toggleSidebar={() => {}} />}
+      {!showLayout && <Header toggleSidebar={() => {}} />}
       <ToastContainer />
 
       <div className="flex flex-1 pt-16">
