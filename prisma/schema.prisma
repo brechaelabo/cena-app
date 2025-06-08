@@ -1,4 +1,3 @@
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -22,7 +21,7 @@ model User {
   createdAt             DateTime  @default(now())
   updatedAt             DateTime  @updatedAt
   preferredTutorId      String?
-  
+
   // Profile fields
   dateOfBirth           String?
   phone                 String?
@@ -37,14 +36,14 @@ model User {
   educationLevel        EducationLevel?
   feedbacksSentCount    Int       @default(0)
   actorsTutoredCount    Int       @default(0)
-  
+
   // Actor specific
   actorLevel            ActorLevel?
   interestedTechniques  String[]  // Array of technique names
   otherInterests        ActorOtherInterest[]
   subscriptionEndDate   String?
   isAutoRenew           Boolean   @default(false)
-  
+
   // Relations
   roles                 RolePivot[]
   submissions           Submission[]
@@ -63,9 +62,9 @@ model RolePivot {
   role      Role
   plan      Plan?
   createdAt DateTime @default(now())
-  
+
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
+
   @@map("role_pivots")
 }
 
@@ -81,9 +80,9 @@ model Theme {
   active            Boolean  @default(true)
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
-  
+
   submissions       Submission[]
-  
+
   @@map("themes")
 }
 
@@ -98,11 +97,11 @@ model Submission {
   feedbackStatus    SubmissionStatus @default(PENDING)
   assignedTutorId   String?
   deadlineTimestamp BigInt?
-  
+
   theme             Theme         @relation(fields: [themeId], references: [id])
   user              User          @relation(fields: [userId], references: [id])
   feedbacks         Feedback[]
-  
+
   @@map("submissions")
 }
 
@@ -115,11 +114,11 @@ model Feedback {
   transcript   String
   liveAt       String?
   createdAt    DateTime @default(now())
-  
+
   submission   Submission @relation(fields: [submissionId], references: [id])
   tutor        User       @relation("TutorFeedbacks", fields: [tutorId], references: [id])
   actor        User       @relation("ActorFeedbacks", fields: [actorId], references: [id])
-  
+
   @@map("feedbacks")
 }
 
@@ -130,9 +129,9 @@ model AddOnPurchase {
   redeemed           Boolean     @default(false)
   targetSubmissionId String?
   createdAt          DateTime    @default(now())
-  
+
   user               User        @relation(fields: [userId], references: [id])
-  
+
   @@map("addon_purchases")
 }
 
@@ -146,9 +145,9 @@ model Notification {
   iconName  String?
   createdAt DateTime         @default(now())
   isRead    Boolean          @default(false)
-  
+
   user      User             @relation(fields: [userId], references: [id])
-  
+
   @@map("notifications")
 }
 
@@ -162,9 +161,9 @@ model ScheduledSession {
   status      SessionStatus     @default(SCHEDULED)
   createdAt   DateTime          @default(now())
   updatedAt   DateTime          @updatedAt
-  
+
   tutor       User              @relation(fields: [tutorId], references: [id])
-  
+
   @@map("scheduled_sessions")
 }
 

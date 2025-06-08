@@ -1,4 +1,3 @@
-
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
@@ -71,9 +70,15 @@ app.use((req, res, next) => {
 
 // Routes
 import authRoutes from './routes/auth';
+import userRoutes from './routes/users';
+import themeRoutes from './routes/themes';
+import submissionRoutes from './routes/submissions';
 
 // API Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/themes', themeRoutes);
+app.use('/api/submissions', submissionRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
@@ -87,11 +92,11 @@ app.get('/api/health', (req, res) => {
 // Error handling middleware
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
   logger.error('Unhandled error:', err);
-  
+
   if (res.headersSent) {
     return next(err);
   }
-  
+
   res.status(500).json({
     success: false,
     error: process.env.NODE_ENV === 'production' 

@@ -37,6 +37,19 @@ mode = "sequential"
 task = "shell.exec"
 args = "cd server && npx ts-node dev.ts"
 
+[[workflows.workflow]]
+name = "Full Stack Development"
+author = 42617357
+mode = "parallel"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm run dev"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd server && npx ts-node dev.ts"
+
 [[ports]]
 localPort = 443
 externalPort = 3000
