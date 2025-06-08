@@ -35,7 +35,7 @@ mode = "sequential"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "cd server && npx tsx dev.ts"
+args = "npx tsx server/dev.ts"
 
 [[workflows.workflow]]
 name = "Full Stack Development"
@@ -48,7 +48,7 @@ args = "npm run dev"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "cd server && npx tsx dev.ts"
+args = "npx tsx server/dev.ts"
 
 [[ports]]
 localPort = 443
