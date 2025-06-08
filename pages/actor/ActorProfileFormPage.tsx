@@ -386,7 +386,9 @@ const ActorProfileFormPage: React.FC = () => {
                         <div className="p-6 text-center">
                         <PriceTagIcon className="w-10 h-10 mx-auto mb-3 text-link-active" />
                         <h3 className="text-xl font-bold text-black mb-1">{plan.name}</h3>
-                        <p className="text-2xl sm:text-3xl md:text-xl lg:text-2xl xl:text-3xl font-extrabold text-headings">R${discountedPrice.toFixed(2)}<span className="text-sm sm:text-base md:text-sm lg:text-base xl:text-lg font-normal text-text-muted">/mês</span></p>
+                        <p className="text-2xl sm:text-3xl md:text-2xl lg:text-3xl xl:text-4xl 2xl:text-5xl font-extrabold text-headings leading-tight">
+                          <span className="inline-block">R${discountedPrice.toFixed(2)}</span><span className="text-[0.4em] font-normal text-text-muted whitespace-nowrap">/mês</span>
+                        </p>
                         {selectedCycle !== BillingCycle.MONTHLY && (<p className="text-xs text-text-muted line-through">De R${plan.priceMonthly.toFixed(2)}/mês</p>)}
                         <p className="text-xs text-text-muted mt-1">
                             Total: R${(discountedPrice * (selectedCycle === BillingCycle.QUARTERLY ? 3 : selectedCycle === BillingCycle.SEMIANNUAL ? 6 : selectedCycle === BillingCycle.ANNUAL ? 12 : 1)).toFixed(2)}
