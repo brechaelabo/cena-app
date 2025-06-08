@@ -64,9 +64,9 @@ const PricingPage: React.FC = () => {
                 <div className="text-center">
                   <PriceTagIcon className="w-10 h-10 mx-auto mb-4 text-link-active" />
                   <h2 className="text-2xl font-bold text-headings mb-2">{plan.name}</h2>
-                  <p className="text-3xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold text-headings mb-1 whitespace-nowrap">
+                  <p className="text-2xl sm:text-3xl md:text-xl lg:text-2xl xl:text-3xl font-extrabold text-headings mb-1">
                     R${discountedPrice.toFixed(2)}
-                    <span className="text-base sm:text-sm md:text-base lg:text-lg font-normal text-text-muted">/mês</span>
+                    <span className="text-sm sm:text-base md:text-sm lg:text-base xl:text-lg font-normal text-text-muted">/mês</span>
                   </p>
                   {selectedCycle !== BillingCycle.MONTHLY && (
                     <p className="text-sm text-text-muted line-through">De R$${plan.priceMonthly.toFixed(2)}/mês</p>
@@ -107,13 +107,13 @@ const PricingPage: React.FC = () => {
           <div className="grid md:grid-cols-2 gap-8 max-w-3xl mx-auto">
             <Card className="p-6">
               <h3 className="text-xl font-bold text-headings mb-2">{PRICING_INFO.addOns.liveFeedback.description}</h3>
-              <p className="text-3xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold text-headings mb-4 whitespace-nowrap">R${PRICING_INFO.addOns.liveFeedback.price.toFixed(2)}</p>
+              <p className="text-2xl sm:text-3xl md:text-xl lg:text-2xl xl:text-3xl font-extrabold text-headings mb-4">R${PRICING_INFO.addOns.liveFeedback.price.toFixed(2)}</p>
               <p className="text-text-body mb-4">Transforme um feedback assíncrono em uma sessão interativa de 25 minutos com seu tutor.</p>
               <Button variant="secondary" className="w-full rounded-lg" onClick={() => navigate(PATHS.REGISTER)}>Adicionar</Button>
             </Card>
             <Card className="p-6">
               <h3 className="text-xl font-bold text-headings mb-2">{PRICING_INFO.addOns.oneOnOneSession.description}</h3>
-              <p className="text-3xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold text-headings mb-4 whitespace-nowrap">R${PRICING_INFO.addOns.oneOnOneSession.price.toFixed(2)}</p>
+              <p className="text-2xl sm:text-3xl md:text-xl lg:text-2xl xl:text-3xl font-extrabold text-headings mb-4">R${PRICING_INFO.addOns.oneOnOneSession.price.toFixed(2)}</p>
               <p className="text-text-body mb-4">Uma sessão de 45 minutos focada em suas necessidades: análise de texto, técnica ou feedback de regravação.</p>
               <Button variant="secondary" className="w-full rounded-lg" onClick={() => navigate(PATHS.REGISTER)}>Adicionar</Button>
             </Card>
