@@ -69,6 +69,9 @@ export const UserEditModal: React.FC<UserEditModalProps> = ({ user: initialUser,
              }
         }
         updatedUser.roles = newRolesPivot;
+        
+        // IMPORTANTE: Definir o currentRole como o role selecionado
+        updatedUser.currentRole = selectedRole;
 
 
         if (selectedRole === Role.ACTOR) {
