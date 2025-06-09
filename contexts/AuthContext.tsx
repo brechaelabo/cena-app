@@ -156,24 +156,31 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setIsLoading(false);
   }, []);
 
-  const login = async (email: string, predefinedRole?: Role) => {
+  const login = async (email: string, password: string) => {
     setIsLoading(true);
-    await new Promise(resolve => setTimeout(resolve, 500)); 
-    const foundUser = platformUsers.find(u => u.email === email);
-    
-    if (foundUser) {
-      const userToSet = { ...foundUser };
-      if (predefinedRole && foundUser.roles.some(r => r.role === predefinedRole)) {
-        userToSet.currentRole = predefinedRole;
-      } else {
-        userToSet.currentRole = foundUser.roles[0]?.role || Role.VISITOR;
+    try {
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Erro no login');
       }
-      setUser(userToSet);
-      localStorage.setItem('cena-user', JSON.stringify(userToSet));
+
+      const { user, token } = data.data;
+      localStorage.setItem('cena-auth-token', token);
+      localStorage.setItem('cena-user', JSON.stringify(user));
+      setUser(user);
+    } catch (error) {
+      throw error;
+    } finally {
       setIsLoading(false);
-    } else {
-      setIsLoading(false);
-      throw new Error("Usuário não encontrado ou senha inválida.");
     }
   };
 

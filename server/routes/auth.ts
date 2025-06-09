@@ -33,8 +33,8 @@ router.post('/register', async (req, res) => {
       data: {
         email,
         name,
+        password: hashedPassword,
         currentRole: role,
-        // Note: password field needs to be added to schema
       }
     });
 
@@ -95,9 +95,14 @@ router.post('/login', async (req, res) => {
       });
     }
 
-    // Note: Password verification needs password field in schema
-    // const validPassword = await bcrypt.compare(password, user.password);
-    // For now, we'll skip password verification until schema is updated
+    // Verify password
+    const validPassword = await bcrypt.compare(password, user.password);
+    if (!validPassword) {
+      return res.status(401).json({
+        success: false,
+        error: 'Credenciais inválidas'
+      });
+    }
 
     // Generate JWT
     const token = jwt.sign(
