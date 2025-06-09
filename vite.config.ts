@@ -22,16 +22,10 @@ export default defineConfig(({ mode }) => {
       proxy: {
         "/api": "http://localhost:3001",
       },
-      // Allow Replit domains
-      allowedHosts: [
-        'localhost',
-        '127.0.0.1', 
-        /.*\.replit\.dev$/,
-        /.*\.picard\.replit\.dev$/,
-        /.*\.riker\.replit\.dev$/,
-        /.*\.kirk\.replit\.dev$/,
-        /.*\.janeway\.replit\.dev$/
-      ],
+      // Disable host checking for Replit
+      hmr: {
+        clientPort: 443, // Use HTTPS port for HMR in Replit
+      },
     },
 
     define: {
