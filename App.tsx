@@ -25,8 +25,8 @@ const App: React.FC = () => {
     <Router>
       <ToastProvider>
         <NotificationProvider>
-          <AuthProvider>
-            <UserManagementProvider>
+          <UserManagementProvider>
+            <AuthProvider>
               <SidebarConfigProvider>
               <Routes>
                 {/* Public routes */}
@@ -73,8 +73,8 @@ const App: React.FC = () => {
                 <Route path="*" element={<NotFoundPage />} />
               </Routes>
             </SidebarConfigProvider>
-            </UserManagementProvider>
-          </AuthProvider>
+            </AuthProvider>
+          </UserManagementProvider>
         </NotificationProvider>
       </ToastProvider>
     </Router>
