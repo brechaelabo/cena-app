@@ -18,14 +18,12 @@ export default defineConfig(({ mode }) => {
     server: {
       host: "0.0.0.0",
       port: 5001, // Vite dev-server
-      strictPort: false, // se 5001 estiver ocupada, pula para a próxima
+      strictPort: true, // Vite avisa se 5001 já estiver ocupada; não pula de porta
       proxy: {
         "/api": "http://localhost:3001",
       },
-      // Allow all hosts for Replit
-      hmr: {
-        port: 443,
-      },
+      // Aceitar qualquer host (mais simples para Replit)
+      // allowedHosts: 'all' - removido completamente para aceitar todos os hosts
     },
 
     define: {
