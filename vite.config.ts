@@ -22,9 +22,9 @@ export default defineConfig(({ mode }) => {
       proxy: {
         "/api": "http://localhost:3001",
       },
-      // Disable host checking for Replit
+      // Allow all hosts for Replit
       hmr: {
-        clientPort: 443, // Use HTTPS port for HMR in Replit
+        port: 443,
       },
     },
 
