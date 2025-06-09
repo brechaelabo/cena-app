@@ -160,37 +160,41 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setIsLoading(true);
     
     try {
-      if (password && password.trim() !== '') {
-        // Login real com backend (senha fornecida)
-        const response = await fetch('/api/auth/login', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ email, password }),
-        });
+      // SEMPRE tentar login real primeiro
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+          email, 
+          password: password || 'admin123' // Usar senha padrão se não fornecida
+        }),
+      });
 
-        const data = await response.json();
+      const data = await response.json();
 
-        if (!response.ok) {
-          throw new Error(data.error || 'Credenciais inválidas');
-        }
-
+      if (response.ok) {
+        // Login real funcionou
         const { user, token } = data.data;
         localStorage.setItem('cena-auth-token', token);
         localStorage.setItem('cena-user', JSON.stringify(user));
         setUser(user);
       } else {
-        // Login mock (sem senha) - apenas para emails específicos de teste
-        await new Promise(resolve => setTimeout(resolve, 500));
-        
-        const foundUser = MOCK_USERS_FOR_LOGIN_CHECK.find(u => u.email === email);
-        if (!foundUser) {
-          throw new Error("Email não encontrado ou senha obrigatória.");
-        }
+        // Se falhou e não tem senha, tentar mock
+        if (!password || password.trim() === '') {
+          await new Promise(resolve => setTimeout(resolve, 500));
+          
+          const foundUser = MOCK_USERS_FOR_LOGIN_CHECK.find(u => u.email === email);
+          if (!foundUser) {
+            throw new Error("Email não encontrado no sistema.");
+          }
 
-        setUser(foundUser);
-        localStorage.setItem('cena-user', JSON.stringify(foundUser));
+          setUser(foundUser);
+          localStorage.setItem('cena-user', JSON.stringify(foundUser));
+        } else {
+          throw new Error(data.error || 'Credenciais inválidas');
+        }
       }
     } catch (error) {
       throw error;
