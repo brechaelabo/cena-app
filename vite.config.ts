@@ -22,7 +22,16 @@ export default defineConfig(({ mode }) => {
       proxy: {
         "/api": "http://localhost:3001",
       },
-      // (allowedHosts removido — Vite aceita qualquer subdomínio *.replit.dev)
+      // Allow Replit domains
+      allowedHosts: [
+        'localhost',
+        '127.0.0.1', 
+        /.*\.replit\.dev$/,
+        /.*\.picard\.replit\.dev$/,
+        /.*\.riker\.replit\.dev$/,
+        /.*\.kirk\.replit\.dev$/,
+        /.*\.janeway\.replit\.dev$/
+      ],
     },
 
     define: {
