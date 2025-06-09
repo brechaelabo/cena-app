@@ -1,0 +1,62 @@
+vale a pena “zerar” os mocks antes de migrar – porque:
+
+Evita colisão de IDs / e-mails entre registros mock e reais.
+
+Deixa seu banco e o front em estado limpo, facilitando ver se cada nova chamada realmente vem da API.
+
+Impede que você carregue dados‐falso para produção por engano.
+
+Como limpar de forma segura e controlada
+1 · Resetar o banco Postgres
+bash
+Copy
+Edit
+# opção rápida: apagar todas as tabelas e recriar o schema
+npx prisma migrate reset
+# digite 'y' quando perguntar; ele roda as migrations do zero
+# depois, se quiser dados iniciais reais:
+npm run db:seed     # apenas se você tiver um seed script confiável
+Isso apaga tudo (inclusive o admin recém-criado). Se quiser preservar o admin, siga o caminho “delete seletivo”:
+
+bash
+Copy
+Edit
+# dentro do psql ou Prisma Studio
+DELETE FROM "User" WHERE email LIKE '%@mock%';
+DELETE FROM "Theme";      -- se quiser recomeçar temas
+DELETE FROM "Submission"; -- idem
+2 · Limpar localStorage no navegador
+Enquanto ainda há contexts que leem localStorage, eles podem repopular a tela com mocks mesmo após resetar o banco.
+
+Abra DevTools → Application → Local Storage → localhost:5001
+
+Clique Clear all.
+
+Recarregue a página.
+
+3 · Remover scripts de seed mock
+Se você usa um script que injeta dados-exemplo (ex.: server/seed.ts), comente ou reflita nele para criar dados reais mínimos (admin + tema vazio), não mocks genéricos.
+
+4 · Atualizar contexts passo a passo
+Depois de cada migração de contexto (Auth → Themes → Users → Submissions):
+
+Teste com curl ou Postman direto na API.
+
+Teste no front após limpar localStorage.
+
+Faça commit pequeno.
+
+Fluxo sugerido
+Backup opcional (dump do banco se quiser voltar).
+
+npx prisma migrate reset – recomeça limpo.
+
+node create-admin.js – cria apenas o admin contato@labo.art.br.
+
+Implementar login real no front.
+
+Migrar ThemeContext; criar 1 tema real pelo Admin UI.
+
+Migrar os outros contexts.
+
+Quando tudo estiver 100 % API-driven, delete definitivamente o código de mocks (localStorage + geradores fake).
