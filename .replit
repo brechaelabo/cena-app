@@ -55,6 +55,10 @@ task = "shell.exec"
 args = "cd server && npx tsx dev.ts"
 
 [[ports]]
+localPort = 443
+externalPort = 3000
+
+[[ports]]
 localPort = 3001
 externalPort = 3001
 
