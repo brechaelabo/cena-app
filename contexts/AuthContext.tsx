@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { User, Role, Plan, RolePivot, BillingCycle, TutorApplicationStatus } from '../types';
 import { PATHS } from '../constants';
@@ -42,13 +41,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const login = async (email: string, password?: string) => {
     setIsLoading(true);
-    
-    try {
-      // Login apenas via API real
-      if (!password || password.trim() === '') {
-        throw new Error("Senha é obrigatória.");
-      }
 
+    try {
       const response = await fetch('/api/auth/login', {
         method: 'POST',
         headers: {
@@ -63,7 +57,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         throw new Error(data.error || 'Credenciais inválidas');
       }
 
-      // Login real funcionou
       const { user, token } = data.data;
       localStorage.setItem('cena-auth-token', token);
       localStorage.setItem('cena-user', JSON.stringify(user));
@@ -77,7 +70,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const register = async (email: string, name: string, password: string, roleRequest: Role = Role.ACTOR) => {
     setIsLoading(true);
-    
+
     try {
       const response = await fetch('/api/auth/register', {
         method: 'POST',
@@ -117,7 +110,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       localStorage.setItem('cena-user', JSON.stringify(updatedUser));
     }
   };
-  
+
   const updateUserPlan = (newPlan: Plan) => {
     if (user && user.currentRole === Role.ACTOR) {
       const updatedUser = { ...user, activePlan: newPlan };
