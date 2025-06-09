@@ -2,6 +2,14 @@ import path from "path";
 import { defineConfig, loadEnv } from "vite";
 import react from "@vitejs/plugin-react";
 
+/**
+ * DEV
+ * - Vite sobe em http://localhost:5001
+ * - Qualquer chamada que comece por /api é encaminhada ao backend em http://localhost:3001
+ *
+ * PRODUÇÃO
+ * - Este proxy é ignorado; o Express serve /dist e a API na mesma porta process.env.PORT
+ */
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, ".", "");
 
@@ -9,22 +17,19 @@ export default defineConfig(({ mode }) => {
     plugins: [react()],
     server: {
       host: "0.0.0.0",
-      port: 5001, // mude aqui se quiser outra porta-dev
-      strictPort: false, // se TRUE, falha se 5000 estiver ocupada
-      allowedHosts: [".replit.dev", ".repl.co", "localhost"],
+      port: 5001, // Vite dev-server
+      strictPort: false, // se 5001 estiver ocupada, pula para a próxima
       proxy: {
-        // todas as chamadas que começam com /api
         "/api": "http://localhost:3001",
       },
-      hmr: {
-        port: 443, // mantém o túnel HTTPS do Replit
-        clientPort: 443,
-      },
+      // (allowedHosts removido — Vite aceita qualquer subdomínio *.replit.dev)
     },
+
     define: {
       "process.env.API_KEY": JSON.stringify(env.GEMINI_API_KEY),
       "process.env.GEMINI_API_KEY": JSON.stringify(env.GEMINI_API_KEY),
     },
+
     resolve: {
       alias: {
         "@": path.resolve(__dirname, "."),

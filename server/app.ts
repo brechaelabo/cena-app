@@ -4,6 +4,8 @@ import helmet from "helmet";
 import dotenv from "dotenv";
 import { PrismaClient } from "@prisma/client";
 import { createLogger, format, transports } from "winston";
+import path from "path";
+import { fileURLToPath } from "url";
 
 // Load environment variables
 dotenv.config();
@@ -58,7 +60,7 @@ app.use(
     origin:
       process.env.NODE_ENV === "production"
         ? process.env.FRONTEND_URL
-        : ["http://localhost:5000", "http://127.0.0.1:5000"],
+        : ["http://localhost:5001", "http://127.0.0.1:5001"],
     credentials: true,
   }),
 );
@@ -75,22 +77,34 @@ app.use((req, res, next) => {
   next();
 });
 
+/**
+ * Arquitetura de portas
+ * ---------------------
+ * DEV
+ *   - API:      http://localhost:3001
+ *   - Frontend: http://localhost:5001  (Vite dev server)
+ *   - Vite faz proxy /api -> 3001
+ *
+ * PRODUÇÃO (npm start)
+ *   - Express serve API + arquivos estáticos da pasta dist/ na porta process.env.PORT
+ *   - Replit mapeia essa porta para o domínio público.
+ */
+
 // Routes
 import authRoutes from "./routes/auth";
 import userRoutes from "./routes/users";
 import themeRoutes from "./routes/themes";
 import submissionRoutes from "./routes/submissions";
 
-import path from "path";
-import { fileURLToPath } from "url";
+// ─── Servir a pasta dist/ em produção ──────────────────────────────────────────
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-
-// ─── Servir a pasta dist/ em produção ───
 const distPath = path.join(__dirname, "..", "dist");
+
+// Arquivos estáticos (JS/CSS/img)
 app.use(express.static(distPath));
+
+// Qualquer rota que NÃO comece por /api devolve o index.html do React
 app.get(/^\/(?!api\/).*/, (_req, res) => {
-  // Se a rota já for /api, deixa seguir
-  if (_req.path.startsWith("/api/")) return next();
   res.sendFile(path.join(distPath, "index.html"));
 });
 
@@ -134,7 +148,7 @@ app.use(
 );
 
 // 404 handler — sem o caractere '*' para evitar o bug do path-to-regexp
-app.use((req, res) => {
+app.use((_req, res) => {
   res.status(404).json({
     success: false,
     error: "Endpoint not found",

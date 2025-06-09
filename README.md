@@ -3,6 +3,24 @@
 
 Bem-vindo à CENA, uma plataforma SaaS inovadora desenhada para atores que buscam aprimorar suas habilidades de self-tape, receber feedback construtivo de tutores qualificados e gerenciar seu progresso artístico e de carreira. A plataforma também oferece ferramentas robustas para administradores gerenciarem conteúdo, usuários e funcionalidades, e para tutores acompanharem seus alunos e fornecerem avaliações detalhadas.
 
+## Fluxo de execução e portas
+
+**Desenvolvimento**  
+- API (Express)   → http://localhost:3001  
+- Frontend (Vite) → http://localhost:5001  
+- O Vite repassa qualquer rota que comece por **/api** para http://localhost:3001, eliminando CORS.
+
+**Produção / Replit**  
+1. `npm run build`   # compila o frontend para dist/  
+2. `npm start`       # o mesmo Express serve API + dist/ na porta `process.env.PORT` (≈ 3001); o Replit expõe essa porta no domínio público.
+
+**Comandos essenciais**  
+- `npm run dev:backend` – API em modo watch (porta 3001)  
+- `npm run dev`         – Vite dev-server (porta 5001)  
+- `npm run build`       – gera dist/  
+- `npm start`           – servidor único em produção
+
+
 ## Visão Geral
 
 A CENA visa ser o ambiente digital completo para o desenvolvimento do ator moderno. Com um foco em prática contínua, feedback de qualidade e acesso a recursos educacionais, a plataforma oferece uma experiência integrada para todos os seus usuários.

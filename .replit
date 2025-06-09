@@ -1,12 +1,16 @@
+# ------------ Ambiente Nix mantido ---------------------------
 modules = ["nodejs-20", "web", "postgresql-16"]
-run = "npm run dev"
 
 [nix]
 channel = "stable-24_05"
 
-[deployment]
-run = ["sh", "-c", "npm run dev"]
+# ------------ Comando principal ------------------------------
+run = "npm start"
 
+[deployment]
+run = ["sh", "-c", "npm start"]
+
+# ------------ Workflows intactos -----------------------------
 [workflows]
 runButton = "Full Stack Development"
 
@@ -50,22 +54,10 @@ args = "npm run dev"
 task = "shell.exec"
 args = "cd server && npx tsx dev.ts"
 
-[[ports]]
-localPort = 443
-externalPort = 3000
-
+# ------------ Portas visíveis no painel Networking ------------
 [[ports]]
 localPort = 3001
-externalPort = 3001
+externalPort = 3001 # backend + dist (produção)
 
 [[ports]]
-localPort = 5000
-externalPort = 80
-
-[[ports]]
-localPort = 5001
-externalPort = 3002
-
-[[ports]]
-localPort = 5002
-externalPort = 3003
+localPort = 5001 # Vite dev-server (externalPort atribuído automaticamente)
