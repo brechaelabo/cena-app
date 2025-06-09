@@ -10,7 +10,7 @@ interface AuthContextType {
   isLoading: boolean;
   login: (email: string, role?: Role) => Promise<void>; 
   logout: () => void;
-  register: (email: string, name: string, roleRequest?: Role) => Promise<void>; 
+  register: (email: string, name: string, password: string, roleRequest?: Role) => Promise<void>; 
   switchRole: (newRole: Role) => void;
   updateUserPlan: (newPlan: Plan) => void; 
   refreshCurrentUser: (userIdToRefresh?: string) => void;
@@ -75,59 +75,33 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   };
 
-  const register = async (email: string, name: string, roleRequest: Role = Role.ACTOR) => {
+  const register = async (email: string, name: string, password: string, roleRequest: Role = Role.ACTOR) => {
     setIsLoading(true);
-    await new Promise(resolve => setTimeout(resolve, 500)); 
     
-    if (platformUsers.find(u => u.email === email)) {
+    try {
+      const response = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, name, password, role: roleRequest }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Erro no registro');
+      }
+
+      const { user, token } = data.data;
+      localStorage.setItem('cena-auth-token', token);
+      localStorage.setItem('cena-user', JSON.stringify(user));
+      setUser(user);
+    } catch (error) {
+      throw error;
+    } finally {
       setIsLoading(false);
-      throw new Error("Email já cadastrado.");
     }
-
-    const newUserId = `user-${Date.now()}`;
-    const newUserRolePivot: RolePivot = {
-      id: `rp-${Date.now()}`,
-      userId: newUserId,
-      role: roleRequest,
-      createdAt: new Date().toISOString(),
-    };
-    let activePlanData: Plan | undefined = undefined;
-    let billingCycleData: BillingCycle | undefined = undefined;
-    let tutorAppStatus: TutorApplicationStatus | undefined = undefined;
-    let initialApprovalStatus = roleRequest === Role.ADMIN; // Admins are approved by default
-
-    if (roleRequest === Role.ACTOR) {
-      newUserRolePivot.plan = Plan.BASIC; 
-      activePlanData = Plan.BASIC;
-      billingCycleData = BillingCycle.MONTHLY;
-      initialApprovalStatus = false; 
-    } else if (roleRequest === Role.TUTOR) {
-      tutorAppStatus = TutorApplicationStatus.PENDING_REVIEW;
-      initialApprovalStatus = false; 
-    } else if (roleRequest === Role.GUEST) {
-      initialApprovalStatus = false; 
-    }
-
-    const newUser: User = {
-      id: newUserRolePivot.userId,
-      clerkId: `clerk-${Date.now()}`,
-      email,
-      name,
-      roles: [newUserRolePivot],
-      currentRole: roleRequest,
-      activePlan: activePlanData,
-      billingCycle: billingCycleData,
-      isApproved: initialApprovalStatus, 
-      tutorApplicationStatus: tutorAppStatus, 
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
-    
-    addRegisteredUser(newUser); 
-
-    setUser(newUser); 
-    localStorage.setItem('cena-user', JSON.stringify(newUser));
-    setIsLoading(false);
   };
 
   const logout = () => {

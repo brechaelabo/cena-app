@@ -31,7 +31,7 @@ router.post('/register', async (req, res) => {
     const user = await prisma.user.create({
       data: {
         email,
-        password: hashedPassword,
+        hashedPassword,
         name,
         currentRole: role
       }
@@ -88,15 +88,15 @@ router.post('/login', async (req, res) => {
       include: { roles: true }
     });
 
-    if (!user || !user.password) {
+    if (!user || !user.hashedPassword) {
       return res.status(401).json({
         success: false,
         error: 'Credenciais inválidas'
       });
     }
 
-    // Verify password (bypass para admin durante dev)
-    const isValidPassword = user.email === 'contato@labo.art.br' ? true : await bcrypt.compare(password, user.password);
+    // Verify password
+    const isValidPassword = await bcrypt.compare(password, user.hashedPassword);
     if (!isValidPassword) {
       return res.status(401).json({
         success: false,
