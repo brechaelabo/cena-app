@@ -1,10 +1,8 @@
 
+const { PrismaClient } = require('@prisma/client');
+const bcrypt = require('bcrypt');
 const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '..', '.env') });
-
-// Importar do diretório server onde as dependências estão instaladas
-const { PrismaClient } = require('../server/node_modules/@prisma/client');
-const bcrypt = require('../server/node_modules/bcrypt');
 
 const prisma = new PrismaClient();
 
