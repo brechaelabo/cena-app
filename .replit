@@ -54,10 +54,13 @@ args = "npm run dev"
 task = "shell.exec"
 args = "cd server && npx tsx dev.ts"
 
-# ------------ Portas visíveis no painel Networking ------------
 [[ports]]
 localPort = 3001
-externalPort = 3001 # backend + dist (produção)
+externalPort = 3001
 
 [[ports]]
-localPort = 5001 # Vite dev-server (externalPort atribuído automaticamente)
+localPort = 5001
+
+[[ports]]
+localPort = 5002
+externalPort = 80
