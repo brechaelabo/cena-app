@@ -36,11 +36,7 @@ const ManageUsersPage: React.FC = () => {
     }
   }, [adminUser, navigate, addToast]);
 
-  const allNonTutorUsers = platformUsers.filter(u =>
-    !u.roles.some(rolePivot => rolePivot.role === Role.TUTOR)
-  );
-
-  const searchedUsers = allNonTutorUsers.filter(u =>
+  const searchedUsers = platformUsers.filter(u =>
     (u.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
      u.email.toLowerCase().includes(searchTerm.toLowerCase()))
   );
@@ -52,6 +48,7 @@ const ManageUsersPage: React.FC = () => {
   const inactiveActors = allActors.filter(u => u.isApproved === false);
   
   const guests = searchedUsers.filter(u => u.currentRole === Role.GUEST);
+  const tutors = searchedUsers.filter(u => u.currentRole === Role.TUTOR);
   const admins = searchedUsers.filter(u => u.currentRole === Role.ADMIN);
 
 
@@ -85,6 +82,7 @@ const ManageUsersPage: React.FC = () => {
   const renderUserTable = (users: User[], userType: Role, currentActorTab?: ActorTab) => {
     const isActorTable = userType === Role.ACTOR;
     const isGuestTable = userType === Role.GUEST;
+    const isTutorTable = userType === Role.TUTOR;
     const isAdminTable = userType === Role.ADMIN;
 
     if (users.length === 0 && !isLoadingPage) {
@@ -121,6 +119,10 @@ const ManageUsersPage: React.FC = () => {
                 <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
               </>}
               {isGuestTable && <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aprovação</th>}
+              {isTutorTable && <>
+                <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Feedbacks</th>
+              </>}
               <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
               <th scope="col" className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
             </tr>
@@ -180,6 +182,20 @@ const ManageUsersPage: React.FC = () => {
                         </span>
                     </td>
                  )}
+                {isTutorTable && (
+                  <>
+                    <td className="px-4 py-3 whitespace-nowrap text-sm">
+                      <span className={`px-2 py-0.5 inline-flex text-xs leading-5 font-semibold rounded-full ${u.isApproved ? 'bg-status-active-bg text-status-active-text' : 'bg-status-inactive-bg text-status-inactive-text'}`}>
+                        {u.tutorApplicationStatus === 'APPROVED' ? 'Aprovado' : 
+                         u.tutorApplicationStatus === 'PENDING_REVIEW' ? 'Pendente' :
+                         u.tutorApplicationStatus === 'OBSERVATION' ? 'Observação' : 'Rejeitado'}
+                      </span>
+                    </td>
+                    <td className="px-4 py-3 whitespace-nowrap text-sm text-text-body">
+                      {u.feedbacksSentCount || 0} enviados
+                    </td>
+                  </>
+                )}
                 <td className="px-4 py-3 whitespace-nowrap text-sm text-text-body">{u.email}</td>
                 <td className="px-4 py-3 whitespace-nowrap text-right text-sm font-medium space-x-2">
                   {isActorTable && (
@@ -260,6 +276,11 @@ const ManageUsersPage: React.FC = () => {
         </div>
         {activeActorTab === 'ativos' && renderUserTable(activeActors, Role.ACTOR, 'ativos')}
         {activeActorTab === 'inativos' && renderUserTable(inactiveActors, Role.ACTOR, 'inativos')}
+      </div>
+
+      <div>
+        <h2 className="text-xl font-semibold text-text-headings mb-1 border-b border-border-subtle pb-2">Tutores ({tutors.length})</h2>
+        {renderUserTable(tutors, Role.TUTOR)}
       </div>
 
       <div>

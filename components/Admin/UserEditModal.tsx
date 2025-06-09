@@ -93,7 +93,23 @@ export const UserEditModal: React.FC<UserEditModalProps> = ({ user: initialUser,
             updatedUser.preferredTutorId = undefined; 
             
             // Set default approval for new role if needed
-            updatedUser.isApproved = selectedRole === Role.ADMIN;
+            updatedUser.isApproved = selectedRole === Role.ADMIN || selectedRole === Role.TUTOR;
+            
+            // Manter campos específicos de tutor se a role for TUTOR
+            if (selectedRole === Role.TUTOR) {
+                updatedUser.tutorApplicationStatus = initialUser.tutorApplicationStatus;
+                updatedUser.baseTechnique = initialUser.baseTechnique;
+                updatedUser.otherTechnique = initialUser.otherTechnique;
+                updatedUser.feedbacksSentCount = initialUser.feedbacksSentCount;
+                updatedUser.actorsTutoredCount = initialUser.actorsTutoredCount;
+            } else {
+                // Clear tutor-specific fields se não for tutor
+                updatedUser.tutorApplicationStatus = undefined;
+                updatedUser.baseTechnique = undefined;
+                updatedUser.otherTechnique = undefined;
+                updatedUser.feedbacksSentCount = undefined;
+                updatedUser.actorsTutoredCount = undefined;
+            }
         }
         
         updateUserInList(updatedUser);
@@ -132,7 +148,7 @@ export const UserEditModal: React.FC<UserEditModalProps> = ({ user: initialUser,
               }}
               className={commonSelectClass}
             >
-              {Object.values(Role).filter(r => r !== Role.VISITOR && r !== Role.TUTOR).map(r => (
+              {Object.values(Role).filter(r => r !== Role.VISITOR).map(r => (
                 <option key={r} value={r}>{ROLE_NAMES[r]}</option>
               ))}
             </select>
