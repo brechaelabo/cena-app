@@ -1,5 +1,4 @@
-
-import React, { useState, useEffect, useContext } from 'react'; 
+import React, { useState, useEffect, useContext } from 'react';
 import { HashRouter, Routes, Route, Navigate, useLocation, useNavigate as useRRDNavigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { ThemeProvider } from './contexts/ThemeContext';
@@ -9,9 +8,9 @@ import { LiveSessionProvider } from './contexts/LiveSessionContext';
 import { PercursosProvider } from './contexts/PercursosContext';
 import { SessoesOneOnOneProvider } from './contexts/SessoesOneOnOneContext';
 import { ToastProvider, useToasts } from './contexts/ToastContext';
-import { NotificationProvider } from './contexts/NotificationContext'; 
+import { NotificationProvider } from './contexts/NotificationContext';
 import { LandingPageProvider } from './contexts/LandingPageContext';
-import { SidebarConfigProvider } from './contexts/SidebarConfigContext'; 
+import { SidebarConfigProvider } from './contexts/SidebarConfigContext';
 import { Toast } from './components/Common/Toast';
 import { PATHS } from './constants';
 import { Role } from './types';
@@ -25,7 +24,7 @@ import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import LandingPage from './pages/LandingPage';
 import PricingPage from './pages/PricingPage';
-import DashboardPage from './pages/DashboardPage'; 
+import DashboardPage from './pages/DashboardPage';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import ManageThemesPage from './pages/admin/ManageThemesPage';
 import ThemeFormPage from './pages/admin/ThemeFormPage';
@@ -39,11 +38,11 @@ import ManagePercursosPage from './pages/admin/ManagePercursosPage';
 import PercursoFormPage from './pages/admin/PercursoFormPage';
 import AdminManageSessoesPage from './pages/admin/AdminManageSessoesPage';
 import SessaoCategoriaFormPage from './pages/admin/SessaoCategoriaFormPage';
-import ManageLandingPage from './pages/admin/ManageLandingPage'; 
-import ManageSidebarsPage from './pages/admin/ManageSidebarsPage'; 
+import ManageLandingPage from './pages/admin/ManageLandingPage';
+import ManageSidebarsPage from './pages/admin/ManageSidebarsPage';
 
 import EmCenaPage from './pages/actor/EmCenaPage';
-import MessagesPage from './pages/common/MessagesPage'; 
+import MessagesPage from './pages/common/MessagesPage';
 import ActorSubmitTapePage from './pages/actor/ActorSubmitTapePage';
 import ActorViewFeedbackPage from './pages/actor/ActorViewFeedbackPage'; // CORRECTED RELATIVE PATH
 import ActorProfileFormPage from './pages/actor/ActorProfileFormPage';
@@ -66,6 +65,7 @@ import LiveSessionsPage from './pages/common/LiveSessionsPage';
 import PendingApprovalPage from './pages/PendingApprovalPage';
 import GuestProfilePage from './pages/guest/GuestProfilePage';
 import NotFoundPage from './pages/NotFoundPage';
+import { clearMockData } from './utils/clearMockData';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -83,7 +83,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, allowedRoles 
   if (!user) {
     return <Navigate to={PATHS.LOGIN} state={{ from: location }} replace />;
   }
-  
+
   // Primary redirection logic for onboarding is now in AppContent's useEffect.
   // This ProtectedRoute check for `!isApproved` can be simplified.
   // It ensures that if a user somehow bypasses AppContent's redirect (e.g. initial load on a protected route),
@@ -140,7 +140,7 @@ const AppContent: React.FC = () => {
     PATHS.HOME, PATHS.PRICING, PATHS.LOGIN, PATHS.REGISTER,
     PATHS.SESSÕES_ACTOR_PLACEHOLDER 
   ];
-  
+
   const onboardingFormPaths = [PATHS.ACTOR_PROFILE_FORM, PATHS.TUTOR_APPLICATION_FORM];
   const pendingApprovalPath = PATHS.PENDING_APPROVAL;
 
@@ -392,6 +392,11 @@ const AppContent: React.FC = () => {
 };
 
 const App: React.FC = () => {
+  // Limpar dados mock no início da aplicação
+  useEffect(() => {
+    clearMockData();
+  }, []);
+
   return (
     <HashRouter>
       <ToastProvider>

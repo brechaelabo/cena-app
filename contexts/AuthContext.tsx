@@ -19,123 +19,7 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// MOCK_USERS is now primarily managed by UserManagementContext's INITIAL_MOCK_USERS
-// This MOCK_USERS here is only used for the login function to find users.
-// The single source of truth for the list of users during runtime is platformUsers from UserManagementContext.
-const MOCK_USERS_FOR_LOGIN_CHECK: User[] = [ // Renamed for clarity
-  {
-    id: 'user-admin-01',
-    clerkId: 'clerk-admin-01',
-    email: 'admin@cena.com',
-    name: 'Helena Vasconcelos', 
-    roles: [{ id: 'rp-admin', userId: 'user-admin-01', role: Role.ADMIN, createdAt: new Date().toISOString() }],
-    currentRole: Role.ADMIN,
-    isApproved: true,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-  {
-    id: 'user-actor-01',
-    clerkId: 'clerk-actor-01',
-    email: 'actor@cena.com',
-    name: 'Mariana Almeida', 
-    roles: [{ id: 'rp-actor', userId: 'user-actor-01', role: Role.ACTOR, plan: Plan.BASIC, createdAt: new Date().toISOString() }],
-    currentRole: Role.ACTOR,
-    activePlan: Plan.BASIC,
-    billingCycle: BillingCycle.MONTHLY, 
-    isApproved: true,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-  {
-    id: 'user-tutor-01',
-    clerkId: 'clerk-tutor-01',
-    email: 'tutor@cena.com',
-    name: 'Prof. João Santos', 
-    roles: [{ id: 'rp-tutor', userId: 'user-tutor-01', role: Role.TUTOR, createdAt: new Date().toISOString() }],
-    currentRole: Role.TUTOR,
-    isApproved: false, 
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-    tutorApplicationStatus: TutorApplicationStatus.PENDING_REVIEW,
-  },
-  {
-    id: 'user-guest-01',
-    clerkId: 'clerk-guest-01',
-    email: 'guest@cena.com',
-    name: 'Visitante Curioso', 
-    roles: [{ id: 'rp-guest', userId: 'user-guest-01', role: Role.GUEST, createdAt: new Date().toISOString() }],
-    currentRole: Role.GUEST,
-    isApproved: false, 
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-  { 
-    id: 'user-tutor-02',
-    clerkId: 'clerk-tutor-02',
-    email: 'tutor2@cena.com',
-    name: 'Profa. Ana Lima', 
-    roles: [{ id: 'rp-tutor2', userId: 'user-tutor-02', role: Role.TUTOR, createdAt: new Date().toISOString() }],
-    currentRole: Role.TUTOR,
-    isApproved: true,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-    tutorApplicationStatus: TutorApplicationStatus.APPROVED,
-  },
-  {
-    id: 'user-actor-02', 
-    clerkId: 'clerk-actor-02',
-    email: 'carlos@cena.com', 
-    name: 'Carlos Pereira', 
-    roles: [{ id: 'rp-actor2', userId: 'user-actor-02', role: Role.ACTOR, plan: Plan.PLUS, createdAt: '2021-06-20T10:00:00Z' }],
-    currentRole: Role.ACTOR, activePlan: Plan.PLUS, billingCycle: BillingCycle.QUARTERLY, isApproved: true, createdAt: '2021-06-20T10:00:00Z', updatedAt: '2023-01-01T00:00:00Z',
-  },
-  {
-    id: 'user-actor-03', 
-    clerkId: 'clerk-actor-03',
-    email: 'beatriz@cena.com', 
-    name: 'Beatriz Costa', 
-    roles: [{ id: 'rp-actor3', userId: 'user-actor-03', role: Role.ACTOR, plan: Plan.PRO, createdAt: '2023-11-05T10:00:00Z' }],
-    currentRole: Role.ACTOR, activePlan: Plan.PRO, billingCycle: BillingCycle.ANNUAL, isApproved: true, createdAt: '2023-11-05T10:00:00Z', updatedAt: '2023-01-01T00:00:00Z',
-  },
-  {
-    id: 'user-actor-04',
-    clerkId: 'clerk-actor-04',
-    email: 'pedro.silva@cena.com',
-    name: 'Pedro Silva',
-    roles: [{ id: 'rp-actor4', userId: 'user-actor-04', role: Role.ACTOR, plan: Plan.BASIC, createdAt: new Date().toISOString() }],
-    currentRole: Role.ACTOR,
-    activePlan: Plan.BASIC,
-    billingCycle: BillingCycle.MONTHLY,
-    isApproved: true,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-   {
-    id: 'user-tutor-03',
-    clerkId: 'clerk-tutor-03',
-    email: 'ricardo.alves@cena.com',
-    name: 'Prof. Ricardo Alves',
-    roles: [{ id: 'rp-tutor3', userId: 'user-tutor-03', role: Role.TUTOR, createdAt: new Date().toISOString() }],
-    currentRole: Role.TUTOR,
-    isApproved: true,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-    tutorApplicationStatus: TutorApplicationStatus.APPROVED,
-  },
-  {
-    id: 'user-tutor-04',
-    clerkId: 'clerk-tutor-04',
-    email: 'sofia.mendes@cena.com',
-    name: 'Profa. Sofia Mendes',
-    roles: [{ id: 'rp-tutor4', userId: 'user-tutor-04', role: Role.TUTOR, createdAt: new Date().toISOString() }],
-    currentRole: Role.TUTOR,
-    isApproved: false, 
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-    tutorApplicationStatus: TutorApplicationStatus.PENDING_REVIEW,
-  }
-];
+// Sistema totalmente API-driven - sem mocks
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
@@ -160,42 +44,30 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setIsLoading(true);
     
     try {
-      // SEMPRE tentar login real primeiro
+      // Login apenas via API real
+      if (!password || password.trim() === '') {
+        throw new Error("Senha é obrigatória.");
+      }
+
       const response = await fetch('/api/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ 
-          email, 
-          password: password || 'admin123' // Usar senha padrão se não fornecida
-        }),
+        body: JSON.stringify({ email, password }),
       });
 
       const data = await response.json();
 
-      if (response.ok) {
-        // Login real funcionou
-        const { user, token } = data.data;
-        localStorage.setItem('cena-auth-token', token);
-        localStorage.setItem('cena-user', JSON.stringify(user));
-        setUser(user);
-      } else {
-        // Se falhou e não tem senha, tentar mock
-        if (!password || password.trim() === '') {
-          await new Promise(resolve => setTimeout(resolve, 500));
-          
-          const foundUser = MOCK_USERS_FOR_LOGIN_CHECK.find(u => u.email === email);
-          if (!foundUser) {
-            throw new Error("Email não encontrado no sistema.");
-          }
-
-          setUser(foundUser);
-          localStorage.setItem('cena-user', JSON.stringify(foundUser));
-        } else {
-          throw new Error(data.error || 'Credenciais inválidas');
-        }
+      if (!response.ok) {
+        throw new Error(data.error || 'Credenciais inválidas');
       }
+
+      // Login real funcionou
+      const { user, token } = data.data;
+      localStorage.setItem('cena-auth-token', token);
+      localStorage.setItem('cena-user', JSON.stringify(user));
+      setUser(user);
     } catch (error) {
       throw error;
     } finally {
