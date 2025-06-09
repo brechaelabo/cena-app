@@ -1,3 +1,4 @@
+
 import { Plan, PlanDetails, PricingInfo, Role, BillingCycle, AddOnType, TutorApplicationStatus, EducationLevel, ActorLevel, ActorOtherInterest, EventAudienceType, SubscriptionStatusFilter, SidebarNavItemConfig } from './types';
 
 export const APP_NAME = "CENA";
@@ -13,7 +14,7 @@ export const PATHS = {
   CURRENT_THEME: '/theme/current', 
   LIVE_SESSIONS: '/live-sessions', 
   MESSAGES: '/messages', // New path for general messages/notifications
-
+  
   // Percursos (Courses)
   PERCURSOS_ACTOR: '/percursos',
   COURSE_DETAIL: '/percursos/:slug', 
@@ -30,7 +31,7 @@ export const PATHS = {
   ACTOR_SUBMIT_TAPE: '/actor/submit/:themeId',
   ACTOR_VIEW_FEEDBACK: '/actor/feedback/:submissionId',
   ACTOR_PROFILE_FORM: '/actor/profile/edit', 
-
+  
   // Tutor specific
   TUTOR_DASHBOARD: '/tutor/dashboard',
   TUTOR_REVIEW_SUBMISSIONS: '/tutor/submissions',
@@ -39,7 +40,7 @@ export const PATHS = {
   TUTOR_APPLICATION_FORM: '/tutor/apply', 
   TUTOR_PROFILE_PAGE: '/tutor/profile/:tutorId', 
   TUTOR_PROFILE_EDIT_FORM: '/tutor/profile/edit', 
-
+  
   // Admin specific
   ADMIN_DASHBOARD: '/admin/dashboard',
   ADMIN_MANAGE_THEMES: '/admin/themes',
@@ -207,8 +208,8 @@ export const MASTER_NAV_ITEMS: Omit<SidebarNavItemConfig, 'currentOrder' | 'isVi
   // Actor Specific (will be filtered by role in context initialization)
   { id: PATHS.ACTOR_EM_CENA, name: 'Em Cena', iconName: 'HomeIcon', path: PATHS.ACTOR_EM_CENA, defaultOrder: 1, originalRoles: [Role.ACTOR], exact: true },
   { id: PATHS.CURRENT_THEME, name: 'Tema do Mês', iconName: 'SquaresPlusIcon', path: PATHS.CURRENT_THEME, defaultOrder: 2, originalRoles: [Role.ACTOR, Role.GUEST], exact: true },
-  { id: PATHS.ACTOR_SUBMIT_TAPE, name: 'Enviar Self-tape', iconName: 'VideoCameraIcon', path: '/actor/submit/current', defaultOrder: 3, originalRoles: [Role.ACTOR], isDynamic: true },
-  { id: PATHS.ACTOR_VIEW_FEEDBACK, name: 'Meus Feedbacks', iconName: 'ClipboardCheckIcon', path: '/actor/feedback/all', defaultOrder: 4, originalRoles: [Role.ACTOR], isDynamic: true },
+  { id: PATHS.ACTOR_SUBMIT_TAPE, name: 'Enviar Self-tape', iconName: 'VideoCameraIcon', path: PATHS.ACTOR_SUBMIT_TAPE.replace(':themeId', 'current'), defaultOrder: 3, originalRoles: [Role.ACTOR], isDynamic: true },
+  { id: PATHS.ACTOR_VIEW_FEEDBACK, name: 'Meus Feedbacks', iconName: 'ClipboardCheckIcon', path: PATHS.ACTOR_VIEW_FEEDBACK.replace(':submissionId', 'all'), defaultOrder: 4, originalRoles: [Role.ACTOR], isDynamic: true },
   { id: PATHS.SESSOES_ACTOR_LISTING, name: 'Sessões 1:1', iconName: 'UserGroupIcon', path: PATHS.SESSOES_ACTOR_LISTING, defaultOrder: 5, originalRoles: [Role.ACTOR], title: 'Sessões Individuais Personalizadas' },
   { id: PATHS.PERCURSOS_ACTOR, name: 'Percursos', iconName: 'BookOpenIcon', path: PATHS.PERCURSOS_ACTOR, defaultOrder: 6, originalRoles: [Role.ACTOR, Role.GUEST], title: 'Nossos cursos e workshops' },
   { id: PATHS.SESSÕES_ACTOR_PLACEHOLDER, name: 'Percursos (Em Breve)', iconName: 'LockClosedIcon', path: PATHS.SESSÕES_ACTOR_PLACEHOLDER, defaultOrder: 6, originalRoles: [Role.ACTOR, Role.GUEST], title: 'Percursos (Em Breve)' }, // Alternative for Percursos if disabled

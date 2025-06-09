@@ -35,7 +35,7 @@ mode = "sequential"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "npx tsx server/dev.ts"
+args = "cd server && npx tsx dev.ts"
 
 [[workflows.workflow]]
 name = "Full Stack Development"
@@ -48,53 +48,12 @@ args = "npm run dev"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "npm run dev:backend"
-
-[[workflows.workflow]]
-name = "Debug Full Stack"
-author = 42617357
-mode = "sequential"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "echo \"=== Iniciando Frontend ===\""
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "npm run dev &"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "echo \"=== Aguardando 3 segundos ===\""
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "sleep 3"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "echo \"=== Iniciando Backend ===\""
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "npx tsx server/dev.ts"
+args = "cd server && npx tsx dev.ts"
 
 [[ports]]
 localPort = 443
 externalPort = 3000
 
 [[ports]]
-localPort = 3001
-externalPort = 3001
-
-[[ports]]
 localPort = 5000
 externalPort = 80
-
-[[ports]]
-localPort = 5001
-externalPort = 3002
-
-[[ports]]
-localPort = 5002
-externalPort = 3003

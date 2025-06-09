@@ -3,6 +3,7 @@ import React, { createContext, useContext, useState, useEffect, ReactNode } from
 import { User, Role, Plan, RolePivot, BillingCycle, TutorApplicationStatus } from '../types';
 import { PATHS } from '../constants';
 import { useNavigate } from 'react-router-dom'; 
+import { usePlatformUsers } from './UserManagementContext'; 
 
 interface AuthContextType {
   user: User | null;
@@ -139,7 +140,8 @@ const MOCK_USERS_FOR_LOGIN_CHECK: User[] = [ // Renamed for clarity
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
+  const { platformUsers, addRegisteredUser, getUserById: getUserFromPlatform } = usePlatformUsers(); 
 
   useEffect(() => {
     const storedUser = localStorage.getItem('cena-user');
@@ -157,7 +159,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const login = async (email: string, predefinedRole?: Role) => {
     setIsLoading(true);
     await new Promise(resolve => setTimeout(resolve, 500)); 
-    const foundUser = MOCK_USERS_FOR_LOGIN_CHECK.find(u => u.email === email);
+    const foundUser = platformUsers.find(u => u.email === email);
     
     if (foundUser) {
       const userToSet = { ...foundUser };
@@ -179,7 +181,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setIsLoading(true);
     await new Promise(resolve => setTimeout(resolve, 500)); 
     
-    if (MOCK_USERS_FOR_LOGIN_CHECK.find(u => u.email === email)) {
+    if (platformUsers.find(u => u.email === email)) {
       setIsLoading(false);
       throw new Error("Email já cadastrado.");
     }
@@ -223,7 +225,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       updatedAt: new Date().toISOString(),
     };
     
-    // User will be added to platform users by UserManagementProvider if needed 
+    addRegisteredUser(newUser); 
 
     setUser(newUser); 
     localStorage.setItem('cena-user', JSON.stringify(newUser));
@@ -256,17 +258,20 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   const refreshCurrentUser = (userIdToRefresh?: string) => {
-    if (user) {
-      const storedUser = localStorage.getItem('cena-user');
-      if (storedUser) {
-        try {
-          const parsedUser = JSON.parse(storedUser);
-          setUser(parsedUser);
-        } catch (error) {
-          console.error("Error refreshing user:", error);
-          logout();
+    const idToUse = userIdToRefresh || user?.id;
+    if (idToUse) {
+        const refreshedUserFromPlatform = getUserFromPlatform(idToUse);
+        if (refreshedUserFromPlatform) {
+            const userWithCorrectCurrentRole = {
+                ...refreshedUserFromPlatform,
+                currentRole: user?.currentRole || refreshedUserFromPlatform.currentRole,
+            };
+            setUser(userWithCorrectCurrentRole);
+            localStorage.setItem('cena-user', JSON.stringify(userWithCorrectCurrentRole));
+        } else {
+            // User might have been deleted, log out
+            logout();
         }
-      }
     }
   };
 

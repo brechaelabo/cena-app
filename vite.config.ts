@@ -6,19 +6,12 @@ export default defineConfig(({ mode }) => {
   return {
     server: {
       host: "0.0.0.0",
-      port: 5001,
+      port: 5000,
       strictPort: false,
       allowedHosts: [".replit.dev", ".repl.co", "localhost"],
       hmr: {
-        port: 5001,
-        clientPort: 5001,
-      },
-      proxy: {
-        '/api': {
-          target: 'http://0.0.0.0:3001',
-          changeOrigin: true,
-          secure: false,
-        },
+        port: 443,
+        clientPort: 443,
       },
     },
     define: {
