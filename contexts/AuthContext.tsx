@@ -160,8 +160,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setIsLoading(true);
     
     try {
-      if (password) {
-        // Tentar login real com backend
+      if (password && password.trim() !== '') {
+        // Login real com backend (senha fornecida)
         const response = await fetch('/api/auth/login', {
           method: 'POST',
           headers: {
@@ -173,7 +173,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         const data = await response.json();
 
         if (!response.ok) {
-          throw new Error(data.error || 'Erro no login');
+          throw new Error(data.error || 'Credenciais inválidas');
         }
 
         const { user, token } = data.data;
@@ -181,12 +181,12 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         localStorage.setItem('cena-user', JSON.stringify(user));
         setUser(user);
       } else {
-        // Fallback para login simulado (mock)
+        // Login mock (sem senha) - apenas para emails específicos de teste
         await new Promise(resolve => setTimeout(resolve, 500));
         
         const foundUser = MOCK_USERS_FOR_LOGIN_CHECK.find(u => u.email === email);
         if (!foundUser) {
-          throw new Error("Email não encontrado.");
+          throw new Error("Email não encontrado ou senha obrigatória.");
         }
 
         setUser(foundUser);
