@@ -1,9 +1,10 @@
 
 export const clearMockData = () => {
-  // Lista de chaves do localStorage que podem conter dados mock
+  // Lista COMPLETA de chaves do localStorage que podem conter dados mock
   const mockKeys = [
     'cena-themes',
     'cena-submissions', 
+    'cena-feedbacks',
     'cena-platform-users',
     'cena-percursos',
     'cena-sessoes-categorias',
@@ -26,13 +27,13 @@ export const clearMockData = () => {
 };
 
 export const clearAllAppData = () => {
-  // Para desenvolvimento - limpa tudo incluindo auth
-  const allKeys = [
-    'cena-user',
-    'cena-auth-token',
-    ...['cena-themes', 'cena-submissions', 'cena-platform-users', 'cena-percursos', 'cena-sessoes-categorias', 'cena-landing-page-content', 'cena-public-live-events', 'cena-scheduled-sessions']
-  ];
-  
-  allKeys.forEach(key => localStorage.removeItem(key));
-  console.log('🧹 All app data cleared');
+  // Limpa TUDO - incluindo auth e todos os dados mock
+  localStorage.clear();
+  console.log('🧹 ALL localStorage data cleared - forcing fresh start');
+};
+
+export const forceRealDataOnly = () => {
+  // Remove todos os dados mock e força reload
+  clearAllAppData();
+  window.location.reload();
 };

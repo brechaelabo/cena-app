@@ -392,9 +392,24 @@ const AppContent: React.FC = () => {
 };
 
 const App: React.FC = () => {
-  // Limpar dados mock no início da aplicação
+  // FORCE complete reset - clear ALL data and start fresh
   useEffect(() => {
-    clearMockData();
+    // Clear ALL localStorage data to ensure no mock contamination
+    const hasAnyMockData = [
+      'cena-themes',
+      'cena-submissions', 
+      'cena-feedbacks',
+      'cena-platform-users',
+      'cena-percursos',
+      'cena-sessoes-categorias'
+    ].some(key => localStorage.getItem(key));
+
+    if (hasAnyMockData) {
+      console.log('🧹 Detected mock data - clearing ALL localStorage');
+      localStorage.clear();
+      window.location.reload();
+      return;
+    }
   }, []);
 
   return (

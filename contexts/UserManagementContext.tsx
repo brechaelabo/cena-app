@@ -150,14 +150,15 @@ const UserManagementContext = createContext<UserManagementContextType | undefine
 
 export const UserManagementProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [platformUsers, setPlatformUsers] = useState<User[]>(() => {
-    const storedUsers = localStorage.getItem('cena-platform-users');
-    return storedUsers ? JSON.parse(storedUsers) : INITIAL_MOCK_USERS;
+    // NO MORE MOCK DATA - start with empty array, load from API only
+    return [];
   });
   const { addNotification } = useNotifications(); 
 
-  useEffect(() => {
-    localStorage.setItem('cena-platform-users', JSON.stringify(platformUsers));
-  }, [platformUsers]);
+  // Remove localStorage persistence - users will come from API only
+  // useEffect(() => {
+  //   localStorage.setItem('cena-platform-users', JSON.stringify(platformUsers));
+  // }, [platformUsers]);
 
   const getUserById = (userId: string): User | undefined => {
     return platformUsers.find(u => u.id === userId);
