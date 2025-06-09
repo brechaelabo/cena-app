@@ -18,12 +18,10 @@ export const LoginForm: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // setError(''); // Removido
     try {
-      await login(email); 
+      await login(email, password); 
       navigate(PATHS.DASHBOARD); 
     } catch (err: any) {
-      // setError(err.message || 'Falha no login. Verifique suas credenciais.'); // Removido
       addToast(err.message || 'Falha no login. Verifique suas credenciais.', 'error');
     }
   };

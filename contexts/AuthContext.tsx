@@ -156,27 +156,42 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setIsLoading(false);
   }, []);
 
-  const login = async (email: string, password: string) => {
+  const login = async (email: string, password?: string) => {
     setIsLoading(true);
+    
     try {
-      const response = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
-      });
+      if (password) {
+        // Tentar login real com backend
+        const response = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email, password }),
+        });
 
-      const data = await response.json();
+        const data = await response.json();
 
-      if (!response.ok) {
-        throw new Error(data.error || 'Erro no login');
+        if (!response.ok) {
+          throw new Error(data.error || 'Erro no login');
+        }
+
+        const { user, token } = data.data;
+        localStorage.setItem('cena-auth-token', token);
+        localStorage.setItem('cena-user', JSON.stringify(user));
+        setUser(user);
+      } else {
+        // Fallback para login simulado (mock)
+        await new Promise(resolve => setTimeout(resolve, 500));
+        
+        const foundUser = MOCK_USERS_FOR_LOGIN_CHECK.find(u => u.email === email);
+        if (!foundUser) {
+          throw new Error("Email não encontrado.");
+        }
+
+        setUser(foundUser);
+        localStorage.setItem('cena-user', JSON.stringify(foundUser));
       }
-
-      const { user, token } = data.data;
-      localStorage.setItem('cena-auth-token', token);
-      localStorage.setItem('cena-user', JSON.stringify(user));
-      setUser(user);
     } catch (error) {
       throw error;
     } finally {
