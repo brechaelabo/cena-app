@@ -1,9 +1,9 @@
+
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { ToastProvider } from './contexts/ToastContext';
 import { NotificationProvider } from './contexts/NotificationContext';
-import { SidebarConfigProvider } from './contexts/SidebarConfigContext';
 import { UserManagementProvider } from './contexts/UserManagementContext';
 import { Role } from './types';
 
@@ -27,7 +27,6 @@ const App: React.FC = () => {
         <NotificationProvider>
           <UserManagementProvider>
             <AuthProvider>
-              <SidebarConfigProvider>
               <Routes>
                 {/* Public routes */}
                 <Route path="/" element={<LandingPage />} />
@@ -72,7 +71,6 @@ const App: React.FC = () => {
                 {/* 404 route */}
                 <Route path="*" element={<NotFoundPage />} />
               </Routes>
-            </SidebarConfigProvider>
             </AuthProvider>
           </UserManagementProvider>
         </NotificationProvider>
