@@ -5,6 +5,9 @@ import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { ToastProvider } from './contexts/ToastContext';
 import { NotificationProvider } from './contexts/NotificationContext';
 import { UserManagementProvider } from './contexts/UserManagementContext';
+import { SidebarConfigProvider } from './contexts/SidebarConfigContext';
+import { LandingPageProvider } from './contexts/LandingPageContext';
+import { PercursosProvider } from './contexts/PercursosContext';
 import { Role } from './types';
 
 // Import pages
@@ -25,54 +28,60 @@ const App: React.FC = () => {
     <Router>
       <ToastProvider>
         <NotificationProvider>
-          <UserManagementProvider>
-            <AuthProvider>
-              <Routes>
-                {/* Public routes */}
-                <Route path="/" element={<LandingPage />} />
-                <Route path="/login" element={<LoginPage />} />
-                <Route path="/register" element={<RegisterPage />} />
+          <AuthProvider>
+            <UserManagementProvider>
+              <SidebarConfigProvider>
+                <LandingPageProvider>
+                  <PercursosProvider>
+                    <Routes>
+                      {/* Public routes */}
+                      <Route path="/" element={<LandingPage />} />
+                      <Route path="/login" element={<LoginPage />} />
+                      <Route path="/register" element={<RegisterPage />} />
 
-                {/* Dashboard route */}
-                <Route path="/dashboard" element={
-                  <ProtectedRoute>
-                    <DashboardPage />
-                  </ProtectedRoute>
-                } />
+                      {/* Dashboard route */}
+                      <Route path="/dashboard" element={
+                        <ProtectedRoute>
+                          <DashboardPage />
+                        </ProtectedRoute>
+                      } />
 
-                {/* Pending approval route */}
-                <Route path="/pending-approval" element={
-                  <ProtectedRoute>
-                    <PendingApprovalPage />
-                  </ProtectedRoute>
-                } />
+                      {/* Pending approval route */}
+                      <Route path="/pending-approval" element={
+                        <ProtectedRoute>
+                          <PendingApprovalPage />
+                        </ProtectedRoute>
+                      } />
 
-                {/* Simple Actor routes */}
-                <Route path="/actor/dashboard" element={
-                  <ProtectedRoute allowedRoles={[Role.ACTOR]}>
-                    <ActorDashboard />
-                  </ProtectedRoute>
-                } />
+                      {/* Simple Actor routes */}
+                      <Route path="/actor/dashboard" element={
+                        <ProtectedRoute allowedRoles={[Role.ACTOR]}>
+                          <ActorDashboard />
+                        </ProtectedRoute>
+                      } />
 
-                {/* Simple Tutor routes */}
-                <Route path="/tutor/dashboard" element={
-                  <ProtectedRoute allowedRoles={[Role.TUTOR]}>
-                    <TutorDashboard />
-                  </ProtectedRoute>
-                } />
+                      {/* Simple Tutor routes */}
+                      <Route path="/tutor/dashboard" element={
+                        <ProtectedRoute allowedRoles={[Role.TUTOR]}>
+                          <TutorDashboard />
+                        </ProtectedRoute>
+                      } />
 
-                {/* Simple Admin routes */}
-                <Route path="/admin/dashboard" element={
-                  <ProtectedRoute allowedRoles={[Role.ADMIN]}>
-                    <AdminDashboard />
-                  </ProtectedRoute>
-                } />
+                      {/* Simple Admin routes */}
+                      <Route path="/admin/dashboard" element={
+                        <ProtectedRoute allowedRoles={[Role.ADMIN]}>
+                          <AdminDashboard />
+                        </ProtectedRoute>
+                      } />
 
-                {/* 404 route */}
-                <Route path="*" element={<NotFoundPage />} />
-              </Routes>
-            </AuthProvider>
-          </UserManagementProvider>
+                      {/* 404 route */}
+                      <Route path="*" element={<NotFoundPage />} />
+                    </Routes>
+                  </PercursosProvider>
+                </LandingPageProvider>
+              </SidebarConfigProvider>
+            </UserManagementProvider>
+          </AuthProvider>
         </NotificationProvider>
       </ToastProvider>
     </Router>
